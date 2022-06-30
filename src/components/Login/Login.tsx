@@ -1,15 +1,20 @@
 import React, { FC, FormEvent, useState } from 'react'
 import SButton from '../Shared/SButton'
 import SInput from '../Shared/SInput'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { useActions } from '@/use/useActions'
+import { AuthActionCreators } from '../../store/reducers/auth/action-creators'
 
 export const Login: FC = () => {
   const [email, changeEmail] = useState('')
   const [password, changePassword] = useState('')
   const location = useLocation()
+  const {login} = useActions({login: AuthActionCreators.login})
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const res = await login('vvv', 'sdsdsa')
+    console.log(res)
   }
 
   return (

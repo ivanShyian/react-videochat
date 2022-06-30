@@ -1,5 +1,5 @@
-import { FC, FormEvent, useEffect, useMemo, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { FC, FormEvent, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import SButton from "../Shared/SButton";
 import SInput from "../Shared/SInput";
 
@@ -7,9 +7,9 @@ type LocationState = null | {
   prevPath: string
 } 
 
-export const Registration: FC = (props) => {
+export const Registration: FC = () => {
   const location = useLocation()
-  const [name, changeName] = useState('')
+  const [nickname, changeNickname] = useState('')
   const [email, changeEmail] = useState('')
   const [password, changePassword] = useState('')
   const [repeatPassword, changeRepeatPassword] = useState('')
@@ -40,9 +40,9 @@ export const Registration: FC = (props) => {
       >
         <SInput
           id="registration-name"
-          value={name}
-          onChange={changeName}
-          placeholder="Name"
+          value={nickname}
+          onChange={changeNickname}
+          placeholder="Nickname"
           type="text"
           className="mb-4"
         />
