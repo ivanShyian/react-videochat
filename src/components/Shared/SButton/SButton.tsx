@@ -20,6 +20,7 @@ export const SButton: FC<Props> = ({
   children,
   className,
   to,
+  disabled = false,
   type = 'button',
   theme = 'primary',
   size = 'medium'
@@ -44,7 +45,8 @@ export const SButton: FC<Props> = ({
   return (
     <button
       onClick={handleClick}
-      className={`s-button px-10 rounded-full bg-orange-400 text-white font-bold h-10 hover:bg-orange-500 transition duration-300 ${buttonStyles}`}
+      disabled={disabled}
+      className={`s-button px-10 rounded-full bg-orange-400 text-white font-bold h-10 hover:bg-orange-500 transition duration-300 disabled:bg-orange-200 ${buttonStyles}`}
     >
       {children}
     </button>

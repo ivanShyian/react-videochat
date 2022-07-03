@@ -1,14 +1,25 @@
 import './index.css'
-import React from 'react'
-import Layout from '../Layout'
-import { useTypedSelector } from '@/use/useTypedSelector'
+import {Navigate, Route, Routes} from 'react-router-dom'
+import Login from '../pages/Login'
+import Registration from '../pages/Registration'
+import LayoutLogin from '../layout/LayoutLogin'
+import LayoutProtected from '../layout/LayoutProtected'
 
 function App() {
-  const {isAuth} = useTypedSelector(state => state.auth)
 
   return (
     <div className="App">
-      <Layout isAuth={isAuth} />
+      <Routes>
+        <Route element={<LayoutLogin />}>
+          <Route path='/login' element={<Login />} />
+          <Route path='/registration' element={<Registration />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+        </Route>
+
+        <Route path='/chats' element={<LayoutProtected />}>
+          <Route path='/chats' element={<div>hihi</div>} />
+        </Route>
+      </Routes>
     </div>
   )
 }

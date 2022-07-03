@@ -1,7 +1,9 @@
+import { useActions } from '@/use/useActions';
 import { FC, FormEvent, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import SButton from "../Shared/SButton";
-import SInput from "../Shared/SInput";
+import { AuthActionCreators } from '../../../store/reducers/auth/action-creators';
+import SButton from "../../shared/SButton";
+import SInput from "../../shared/SInput";
 
 type LocationState = null | {
   prevPath: string
@@ -13,10 +15,22 @@ export const Registration: FC = () => {
   const [email, changeEmail] = useState('')
   const [password, changePassword] = useState('')
   const [repeatPassword, changeRepeatPassword] = useState('')
+  const {signup} = useActions(AuthActionCreators.signup)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (submitButtonActive && passwordsIsEqual) {
+      signup(nickname, email, password)
+    }
   }
+
+  const submitButtonActive = useMemo(() => {
+    return !!(nickname.length && email.length && password.length && repeatPassword.length)
+  }, [nickname, email, password, repeatPassword])
+
+  const passwordsIsEqual = useMemo(() => {
+    return password === repeatPassword
+  }, [password, repeatPassword])
 
   const locationState = useMemo(() => location.state as LocationState, [location])
 
@@ -72,6 +86,7 @@ export const Registration: FC = () => {
         />
         <SButton
           className="w-full"
+          disabled={!submitButtonActive}
           type="submit"
         >
           Sign up

@@ -20,6 +20,7 @@ export enum ButtonType {
 export interface Props {
   children: string | ReactNode
   onClick?: () => any
+  disabled?: boolean
   to?: string | {pathname: string, state?: any}
   type?: keyof typeof ButtonType
   theme?: keyof typeof ButtonTheme

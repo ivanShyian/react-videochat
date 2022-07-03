@@ -1,21 +1,32 @@
-import React, { FC, FormEvent, useState } from 'react'
-import SButton from '../Shared/SButton'
-import SInput from '../Shared/SInput'
+import React, { FC, FormEvent, useMemo, useState } from 'react'
+import SButton from '../../shared/SButton'
+import SInput from '../../shared/SInput'
 import { useLocation } from 'react-router-dom'
 import { useActions } from '@/use/useActions'
-import { AuthActionCreators } from '../../store/reducers/auth/action-creators'
+import { AuthActionCreators } from '../../../store/reducers/auth/action-creators'
 
 export const Login: FC = () => {
   const [email, changeEmail] = useState('')
   const [password, changePassword] = useState('')
   const location = useLocation()
-  const {login} = useActions({login: AuthActionCreators.login})
+  const {login} = useActions(AuthActionCreators.login)
 
   const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const res = await login('vvv', 'sdsdsa')
-    console.log(res)
+    if (submitButtonActive) {
+      await login(email, password)
+      clearFields()
+    }
   }
+
+  const clearFields = () => {
+    changePassword('')
+    changeEmail('')
+  }
+
+  const submitButtonActive = useMemo(() => {
+    return !!(email.length && password.length)
+  }, [email, password])
 
   return (
     <div className="login">
@@ -34,6 +45,7 @@ export const Login: FC = () => {
       <SInput
         id="login-password"
         value={password}
+        type="password"
         onChange={changePassword}
         placeholder="Password"
         className='mb-4'
