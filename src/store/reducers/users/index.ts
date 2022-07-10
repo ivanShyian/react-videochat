@@ -8,7 +8,7 @@ const initialState: UsersState = {
   query: ''
 }
 
-export default function userReducer (state = initialState, action: UsersAction) {
+export default function userReducer (state = initialState, action: UsersAction): UsersState {
   switch (action.type) {
     case UsersActionEnum.SET_USERS:
       return {...state, users: action.payload}

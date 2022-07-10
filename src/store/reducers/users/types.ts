@@ -35,4 +35,4 @@ export interface SetIsLoadingAction {
 }
 
 export type UsersAction = 
- SetErrorAction | SetUsersAction | SetIsLoadingAction | SetUserQuerys
+ SetErrorAction | SetUsersAction | SetIsLoadingAction | SetUsersQuery

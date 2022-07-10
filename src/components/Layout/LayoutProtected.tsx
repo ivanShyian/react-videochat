@@ -1,25 +1,20 @@
-import { useActions } from '@/use/useActions'
 import { useTypedSelector } from '@/use/useTypedSelector'
-import React, {useEffect} from 'react'
+import React, {FC} from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { ChatsActionCreators } from '../../store/reducers/chats/action-creators'
 import TheSidebar from '../TheSidebar'
+import { useChat, UseChatType } from '@/use/useChat'
 
-const LayoutProtected = () => {
+const LayoutProtected: FC = () => {
   const {isAuth} = useTypedSelector(selector => selector.auth)
-  const {getChats} = useActions(ChatsActionCreators.getChats)
+  useChat(UseChatType.Init)
 
   if (!isAuth) return <Navigate to="/login" />
   
-  useEffect(() => {
-    getChats()
-  }, [])
-
   return (
     <div className="layout-default">
-      <main className="main flex h-full">
+      <main className="main flex h-full bg-gradient-to-r from-slate-900 to-pink-800">
         <TheSidebar />
-        <section>
+        <section className="flex flex-1 h-full">
           <Outlet />
         </section>
       </main>

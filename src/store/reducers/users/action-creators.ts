@@ -2,8 +2,8 @@ import { Cookies } from 'react-cookie';
 import { IUser } from 'src/models/IUser';
 import { AppDispatch, RootState, ThunkArgs } from 'src/store';
 import { SetUsersAction, UsersActionEnum, SetIsLoadingAction, SetErrorAction, SetUsersQuery } from './types';
-import axiosClient from '../../../api/axios'
-import api from '../../../api/routes'
+import axiosClient from '@/api/axios'
+import api from '@/api/routes'
 
 export const UsersActionCreators = {
   setUsers: (users: IUser[]): SetUsersAction => ({type: UsersActionEnum.SET_USERS, payload: users}),

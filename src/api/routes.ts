@@ -6,7 +6,9 @@ const auth = {
 
 const chats = {
   alias: '/chat',
-  getChats: () => `${chats.alias}/all`
+  getChats: () => `${chats.alias}/all`,
+  getChatByUserId: (id: string) => `${chats.alias}/user/${id}`,
+  postChatWithUser: () => `${chats.alias}/create`
 }
 
 const users = {
@@ -14,8 +16,14 @@ const users = {
   getUserList: (query: string) => `${users.alias}/find/?search=${query}` 
 }
 
+const messages = {
+  alias: '/chat',
+  getChatMessages: (chatId: string) => `${messages.alias}/messages/${chatId}`
+}
+ 
 export default {
   auth,
   chats,
-  users
+  users,
+  messages
 }

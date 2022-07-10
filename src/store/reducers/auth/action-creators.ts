@@ -1,8 +1,8 @@
 import { IUser, IUserToken } from 'src/models/IUser'
 import { AppDispatch, RootState, ThunkArgs } from 'src/store'
 import {AuthActionEnum, SetIsAuthAction, SetErrorAction, SetIsLoadingAction, SetUserAction, SetUserTokenAction} from './types'
-import axiosClient from '../../../api/axios'
-import api from '../../../api/routes'
+import axiosClient from '@/api/axios'
+import api from '@/api/routes'
 import { bindActionCreators } from 'redux'
 
 export const AuthActionCreators = {
@@ -16,7 +16,7 @@ export const AuthActionCreators = {
     const {accessToken, refreshToken, ...other} = data
     dispatch(AuthActionCreators.setUser({...other}))
     dispatch(AuthActionCreators.setUserToken({accessToken, refreshToken}))
-    cookies.set('userData', data)
+    cookies.set('userData', data, {path: '/'})
     dispatch(AuthActionCreators.setIsAuth(true))
   },
   login: (email: string, password: string) => async (dispatch: AppDispatch) => {

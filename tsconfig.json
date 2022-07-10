@@ -18,13 +18,13 @@
     "jsx": "react-jsx",
     "paths": {
       "@/components/*": ["src/components/*"],
-      // "@/models/*": ["src/models/*"],
-      // "@/public/*": ["public/*"],
+      "@/api/*": ["src/api/*"],
       "@/use/*": ["src/use/*"],
-      // "@/redux/*": ["src/redux/*"],
+      "@/models/*": ["src/models/*"],
+      "@/store/*": ["src/store/*"],
+      "@/utils/*": ["src/utils/*"],
+      "@/assets/*": ["src/assets/*"],
       // "@/ctx/*": ["src/context/*"],
-      // "@/api/*": ["src/api/*"],
-      // "@/utils/*": ["src/utils/*"]
     }
   },
   "include": ["src"],

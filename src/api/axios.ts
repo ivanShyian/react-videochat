@@ -1,8 +1,8 @@
 import axios from 'axios'
-import objectHasOwnProperty from '../utils/objectHasOwnProperty'
+import objectHasOwnProperty from '@/utils/objectHasOwnProperty'
 import { bindActionCreators, Store } from 'redux'
-import { AuthActionCreators } from '../store/reducers/auth/action-creators'
-import api from '../api/routes'
+import { AuthActionCreators } from '@/store/reducers/auth/action-creators'
+import api from '@/api/routes'
 
 let store: Store
 

@@ -1,9 +1,11 @@
 import './index.css'
 import {Navigate, Route, Routes} from 'react-router-dom'
-import Login from '../pages/Login'
-import Registration from '../pages/Registration'
-import LayoutLogin from '../layout/LayoutLogin'
-import LayoutProtected from '../layout/LayoutProtected'
+import Login from '../Pages/Login'
+import Registration from '../Pages/Registration'
+import LayoutLogin from '../Layout/LayoutLogin'
+import LayoutProtected from '../Layout/LayoutProtected'
+import ChatEmpty from '../Chat/ChatEmpty'
+import Chat from '../Chat'
 
 function App() {
 
@@ -17,7 +19,8 @@ function App() {
         </Route>
 
         <Route path='/chats' element={<LayoutProtected />}>
-          <Route path='/chats' element={<div>hihi</div>} />
+          <Route path='/chats' element={<ChatEmpty />} />
+          <Route path='/chats/:chatId' element={<Chat />} />
         </Route>
       </Routes>
     </div>
