@@ -1,5 +1,5 @@
 import { IChat, IChatsMap } from 'src/models/IChat';
-import { ChatsActionEnum, SetChatsAction, SetErrorAction, SetIsFetchedAction, SetIsLoadingAction, UpdateChatLastMessageAction } from './types';
+import { AppendChatAction, ChatsActionEnum, SetChatsAction, SetErrorAction, SetIsFetchedAction, SetIsLoadingAction, UpdateChatLastMessageAction } from './types';
 import axiosClient from '@/api/axios'
 import api from '@/api/routes'
 import { AppDispatch } from 'src/store';
@@ -14,6 +14,7 @@ export const ChatsActionCreators = {
   setIsLoading: (loading: boolean): SetIsLoadingAction => ({type: ChatsActionEnum.SET_IS_LOADING, payload: loading}),
   setIsFetched: (fetched: boolean): SetIsFetchedAction => ({type: ChatsActionEnum.SET_FETCHED, payload: fetched}),
   setChats: (chats: IChatsMap): SetChatsAction => ({type: ChatsActionEnum.SET_CHATS, payload: chats}),
+  appendChat: (chat: IChatsMap): AppendChatAction => ({type: ChatsActionEnum.APPEND_CHAT, payload: chat}),
   updateLastMessage: (message: IMessage): UpdateChatLastMessageAction => ({type: ChatsActionEnum.UPDATE_CHAT, payload: message}),
 
   getChats: () => async(dispatch: AppDispatch) => {
@@ -36,16 +37,29 @@ export const ChatsActionCreators = {
     }
   },
 
-  getChatByUserId: (userId: string) => async(dispatch: AppDispatch) => {
+  getSingleChatByRoom: (id: string) => async(dispatch: AppDispatch) => {
     try {
       dispatch(ChatsActionCreators.setIsLoading(true))
-      const {data} = await axiosClient.get(api.chats.getChatByUserId(userId))
-      console.log({ data })
+      const {data} = await axiosClient.get(api.chats.getChatByRoomId(id))
+      if (data.chat && Object.keys(data.chat).length) {
+        dispatch(ChatsActionCreators.appendChat({[data.chat.id]: data.chat}))
+      }
       dispatch(ChatsActionCreators.setIsLoading(false))
     } catch (e: any) {
       dispatch(ChatsActionCreators.setError(e.response.data.message))
     }
   },
+
+  // getChatByUserId: (userId: string) => async(dispatch: AppDispatch) => {
+  //   try {
+  //     dispatch(ChatsActionCreators.setIsLoading(true))
+  //     const {data} = await axiosClient.get(api.chats.getChatByUserId(userId))
+  //     console.log({ data })
+  //     dispatch(ChatsActionCreators.setIsLoading(false))
+  //   } catch (e: any) {
+  //     dispatch(ChatsActionCreators.setError(e.response.data.message))
+  //   }
+  // },
 
   createChatWithUser: (userId: string, callback: (chatId: string) => void) => async(dispatch: AppDispatch) => {
     try {

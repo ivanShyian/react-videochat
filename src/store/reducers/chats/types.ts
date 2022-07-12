@@ -13,11 +13,17 @@ export enum ChatsActionEnum {
   SET_CHATS = 'SET_CHATS',
   SET_ERROR = 'SET_ERROR',
   SET_IS_LOADING = 'SET_IS_LOADING',
-  UPDATE_CHAT = 'UPDATE_CHAT'
+  UPDATE_CHAT = 'UPDATE_CHAT',
+  APPEND_CHAT = 'APPEND_CHAT'
 }
 
 export interface SetChatsAction {
   type: ChatsActionEnum.SET_CHATS
+  payload: IChatsMap
+}
+
+export interface AppendChatAction {
+  type: ChatsActionEnum.APPEND_CHAT,
   payload: IChatsMap
 }
 
@@ -42,4 +48,4 @@ export interface SetIsLoadingAction {
 }
 
 export type ChatsAction = 
- SetErrorAction | SetChatsAction | SetIsLoadingAction | UpdateChatLastMessageAction | SetIsFetchedAction
+  SetErrorAction | SetChatsAction | SetIsLoadingAction | UpdateChatLastMessageAction | SetIsFetchedAction | AppendChatAction

@@ -42,6 +42,8 @@ export const Registration: FC = () => {
             type="link" 
             to="/login"
             size="small"
+            theme="transparent"
+            className="border-none"
           >
             &#8592; Back to login
           </SButton>

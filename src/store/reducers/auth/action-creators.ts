@@ -4,6 +4,7 @@ import {AuthActionEnum, SetIsAuthAction, SetErrorAction, SetIsLoadingAction, Set
 import axiosClient from '@/api/axios'
 import api from '@/api/routes'
 import { bindActionCreators } from 'redux'
+import moment from 'moment'
 
 export const AuthActionCreators = {
   setUser: (user: IUser): SetUserAction => ({type: AuthActionEnum.SET_USER, payload: user}),
@@ -16,7 +17,7 @@ export const AuthActionCreators = {
     const {accessToken, refreshToken, ...other} = data
     dispatch(AuthActionCreators.setUser({...other}))
     dispatch(AuthActionCreators.setUserToken({accessToken, refreshToken}))
-    cookies.set('userData', data, {path: '/'})
+    cookies.set('userData', data, {path: '/', expires: moment().add(3, 'days').toDate()})
     dispatch(AuthActionCreators.setIsAuth(true))
   },
   login: (email: string, password: string) => async (dispatch: AppDispatch) => {

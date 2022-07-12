@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-export const ChatEmpty: FC = () => {
+export const Chats: FC = () => {
   return (
     <div className="chat w-full relative">
       <p className="absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 max-w-md text-center leading-snug font-extrabold text-transparent text-5xl bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">

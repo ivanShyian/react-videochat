@@ -11,9 +11,28 @@ body, #root, .App, .layout-default {
 }
 
 .card {
-  @apply rounded-lg bg-white p-10;
+  @apply rounded-lg bg-white/30 p-10;
 }
 
 .card__login {
   @apply pt-20 pb-6 pl-16 pr-24;
+}
+
+.pretty-scrollbar::-webkit-scrollbar {
+  @apply w-1.5;
+}
+
+/* Track */
+.pretty-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent w-1;
+}
+
+/* Handle */
+.pretty-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-[#74133c] rounded-2xl;
+}
+
+/* Handle on hover */
+.pretty-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#5c1434];
 }

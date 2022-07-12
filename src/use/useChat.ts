@@ -31,6 +31,7 @@ export const useChat = (type = UseChatType.Actions): ReturnStatement => {
   const {chatId} = useParams()
   const {chats, isChatsFetched} = useTypedSelector(selector => selector.chats)
   const {user} = useTypedSelector(selector => selector.auth)
+  const {messages} = useTypedSelector(selector => selector.messages)
   const {getChats, getMessagesByChat, createChatWithUser, setQuery} = useActions(...actionCreatorList)
 
   const [currentChat, setCurrentChat] = useState<IChat>({} as IChat)
@@ -47,25 +48,22 @@ export const useChat = (type = UseChatType.Actions): ReturnStatement => {
   }, [])
 
   useEffect(() => {
-    if (chatsExists && type !== UseChatType.Actions) {
-      SocketService.subscribeToAllChats(Object.keys(chats))
-    }
+    if (chatsExists && type !== UseChatType.Actions) SocketService.subscribeToAllChats(Object.keys(chats))
   }, [chatsExists])
 
   useEffect(() => {
     if (chatsExists && type === UseChatType.Actions && chatId) {
       setCurrentChat(chats[chatId])
+      if (Object.keys(messages).length && messages[chatId] && messages[chatId].length) return
       getMessagesByChat(chatId)
     }
   }, [chatsExists, chatId])
 
   useEffect(() => {
-    if (isChatsFetched && chatId && !chatsExists) {
-      navigate('/')
-    }
+    if (isChatsFetched && chatId && !chatsExists) navigate('/')
   }, [isChatsFetched, chatId, chatsExists])
 
-  const sendMessage = (message: string) => {
+  const sendMessage = (message: string): void => {
     const messageBody = {
       room: currentChat.id,
       senderId: user.id,
@@ -75,7 +73,7 @@ export const useChat = (type = UseChatType.Actions): ReturnStatement => {
     SocketService.sendMessageToUser(messageBody)
   }
 
-  const onMemberClick = async(id: string) => {
+  const onMemberClick = async(id: string): Promise<void> => {
     await createChatWithUser(id, (chatId: string) => {
       SocketService.joinToRoomWithUser(chatId, id)
       navigate(`/chats/${chatId}`)

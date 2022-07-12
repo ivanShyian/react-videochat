@@ -12,6 +12,14 @@ export default function chatsReducer(state = initialState, action: ChatsAction):
   switch(action.type) {
     case ChatsActionEnum.SET_CHATS:
       return {...state, chats: action.payload}
+    case ChatsActionEnum.APPEND_CHAT:
+      return {
+        ...state,
+        chats: {
+          ...state.chats,
+          ...action.payload
+        }
+      }
     case ChatsActionEnum.UPDATE_CHAT: {
       return {
         ...state,

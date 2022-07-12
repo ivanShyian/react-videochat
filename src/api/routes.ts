@@ -8,6 +8,7 @@ const chats = {
   alias: '/chat',
   getChats: () => `${chats.alias}/all`,
   getChatByUserId: (id: string) => `${chats.alias}/user/${id}`,
+  getChatByRoomId: (id: string) => `${chats.alias}/room/${id}`,
   postChatWithUser: () => `${chats.alias}/create`
 }
 

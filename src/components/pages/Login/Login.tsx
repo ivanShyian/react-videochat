@@ -48,7 +48,7 @@ export const Login: FC = () => {
         type="password"
         onChange={changePassword}
         placeholder="Password"
-        className='mb-4'
+        className="mb-4"
       />
       <SButton
         className="card__button w-full mb-2"
@@ -59,9 +59,10 @@ export const Login: FC = () => {
       <div className="card__forgot mb-24">
         <span className="font-noraml text-sm">Forgot</span>
         <SButton
-          className='pl-1'
-          size='small'
-          type='link'
+          className="pl-1 border-none"
+          theme="transparent"
+          size="small"
+          type="link"
           to="/registration"
         >
           Username/Password?
@@ -69,8 +70,10 @@ export const Login: FC = () => {
       </div>
       <div className="card__signout">
         <SButton
-          size='small'
-          type='link'
+          size="small"
+          type="link"
+          theme="transparent"
+          className="border-none"
           to={{
             pathname: '/registration',
             state: { prevPath: location.pathname }

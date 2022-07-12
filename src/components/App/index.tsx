@@ -4,8 +4,8 @@ import Login from '../Pages/Login'
 import Registration from '../Pages/Registration'
 import LayoutLogin from '../Layout/LayoutLogin'
 import LayoutProtected from '../Layout/LayoutProtected'
-import ChatEmpty from '../Chat/ChatEmpty'
-import Chat from '../Chat'
+import Chats from '../Pages/Chats'
+import ChatsChat from '../Pages/ChatsChat'
 
 function App() {
 
@@ -19,8 +19,8 @@ function App() {
         </Route>
 
         <Route path='/chats' element={<LayoutProtected />}>
-          <Route path='/chats' element={<ChatEmpty />} />
-          <Route path='/chats/:chatId' element={<Chat />} />
+          <Route path='/chats' element={<Chats />} />
+          <Route path='/chats/:chatId' element={<ChatsChat />} />
         </Route>
       </Routes>
     </div>

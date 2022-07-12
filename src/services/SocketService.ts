@@ -5,6 +5,8 @@ import { bindActionCreators, Store } from 'redux'
 import { MessagesActionCreators } from '@/store/reducers/messages/action-creators'
 import { IMessage } from '@/models/IMessage'
 import { ChatsActionCreators } from '@/store/reducers/chats/action-creators'
+import moment from 'moment'
+import Peer from 'peerjs'
 
 let store: Store
 
@@ -13,6 +15,14 @@ export const injectStoreInSockets = (_store: Store) => {
 }
 
 const cookie = new Cookies()
+
+const initializeSocketConnection = (host: string, clientId: string) => {
+  return io(host, {
+    autoConnect: false,
+    path: '/ws',
+    auth: {userId, clientId}
+  })
+}
 
 class SocketService {
   socket: Socket
@@ -24,14 +34,9 @@ class SocketService {
     this.userId = userId
     this.clientId = clientId === undefined ? uuidv4() : clientId as string
     this.connected = false
+    this.socket = initializeSocketConnection(host, this.clientId)
 
-    this.socket = io(host, {
-      autoConnect: false,
-      path: '/ws',
-      auth: { userId, clientId: this.clientId }
-    })
-    
-    if (clientId === undefined) cookie.set('sid', this.clientId, {path: '/'})
+    if (clientId === undefined) cookie.set('sid', this.clientId, {path: '/', expires: moment().add(3, 'days').toDate()})
   }
 
   connect() {
@@ -49,15 +54,17 @@ class SocketService {
       })
     })
 
+    this.socket.on('user-connected', () => {
+      console.log('did')
+    })
+
     this.socket.on('new_message', (content: IMessage) => {
-      // const isUserSender = this.userId === content.sender_id
       store.dispatch(MessagesActionCreators.setMessage(content.chatroom_id, content))
       store.dispatch(ChatsActionCreators.updateLastMessage(content))
     })
 
     this.socket.on('join_to_room', (data) => {
-      console.log('do?')
-      console.log({ data })
+      bindActionCreators(ChatsActionCreators.getSingleChatByRoom, store.dispatch)(data.room)
     })
   }
 
@@ -76,6 +83,10 @@ class SocketService {
   sendMessageToUser(content: any) {
     this.socket.emit('message', content)
   }
+
+  // sendStreamToUser(receiverId: string, stream: MediaStream) {
+  //   this.socket.emit('send_stream', {receiverId, stream})
+  // }
 }
 
 const userId = cookie.get('userData')?.id

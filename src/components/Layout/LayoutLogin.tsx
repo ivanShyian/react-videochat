@@ -10,8 +10,8 @@ const LayoutLogin = () => {
   }
 
   return (
-    <main className="main bg-gradient-to-r from-purple-500 to-pink-500 h-screen flex justify-center items-center layout-login login">
-      <div className='card card__login flex relative' style={{height: '476px', width: '750px'}}>
+    <main className="main bg-gradient-to-r from-slate-900 to-pink-800 h-screen flex justify-center items-center layout-login login">
+      <div className="card card__login flex relative h-[476px] w-[750px]">
         <div className="card__image bg-background-login bg-no-repeat bg-contain h-72 w-72 mr-auto" />
         <Outlet />
       </div>
