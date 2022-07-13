@@ -5,7 +5,7 @@ import { useChat, UseChatType } from '@/use/useChat';
 import ChatHeader from '../../Chat/ChatHeader';
 import ChatBox from '../../Chat/ChatBox';
 import ChatFooter from '../../Chat/ChatFooter';
-import { useCall } from '@/use/useCall';
+import { useCallContext } from '@/use/useCallContext';
 
 export const ChatsChat: FC = () => {
   const {chatId} = useParams()
@@ -18,7 +18,7 @@ export const ChatsChat: FC = () => {
     videoRef,
     videoRefMember,
     callStarted
-  } = useCall()
+  } = useCallContext()
 
   const handleCall = () => {
     if (currentChat.member) {

@@ -5,7 +5,7 @@ import { Props, ButtonTheme, ButtonSize, ButtonType } from "./types"
 
 const buttonTheme: { [key in keyof typeof ButtonTheme]: string } = {
   primary: 'bg-orange-400 hover:bg-orange-500 disabled:bg-orange-200 text-white',
-  transparent: '!bg-transparent !hover:bg-transparent text-black border-2 border-black'
+  transparent: '!bg-transparent !hover:bg-transparent text-white border-2 border-white'
 }
 
 const buttonSize: { [key in keyof typeof ButtonSize]: string } = {

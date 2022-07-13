@@ -1,20 +1,109 @@
 import { useEffect, useRef, useState } from 'react'
-import SocketService from '../services/SocketService'
-import PeerService from '../services/PeerService'
 import { useTypedSelector } from './useTypedSelector'
+import Peer, { MediaConnection } from 'peerjs'
 
-export const useCall = () => {
+export interface ICallReturnStatement {
+  videoRef: React.RefObject<HTMLVideoElement>;
+  videoRefMember: React.RefObject<HTMLVideoElement>;
+  callStarted: boolean;
+  callRequest: null | {roomId: string, callerId: string}
+  onCallUser: (roomId: string, userToCall: string) => Promise<void>
+  acceptCall: () => void
+  declineCall: () => void
+}
+
+interface ICallInterface {
+  roomId: string,
+  callerId: string
+  callInstance: MediaConnection
+} 
+
+export const useCall = (): ICallReturnStatement => {
   const {user} = useTypedSelector(selector => selector.auth)
   const [callStarted, setCallStarted] = useState<boolean>(false)
-  const [peerInstance, setPeerInstance] = useState<PeerService | null>(null)
-
+  const [callRequest, setCallRequest] = useState<ICallInterface | null>(null)
+  const [peer, setPeer] = useState<Peer | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const videoRefMember = useRef<HTMLVideoElement>(null)
 
-  const startCall = (userToCall: string) => {
-    setCallStarted(true)
-    initVideoCall(userToCall)
+
+  useEffect(() => {
+    const myPeer = new Peer(user.id, {
+      host: 'localhost',
+      port: 3001,
+      path: '/',
+      secure: false,
+      // debug: 3
+    })
+
+    myPeer.on('open', (id: string) => {
+    })
+
+    myPeer.on('call', async(call) => {
+      setCallRequest({
+        callInstance: call,
+        roomId: call.metadata.roomId,
+        callerId: call.peer
+      })
+    })
+
+    myPeer.on('error', (err) => {
+      console.log({err})
+    })
+
+    setPeer(myPeer)
+  }, [])
+
+
+  const onCallUser = async(roomId: string, userToCall: string) => {
+    const stream = await createStream()
+    if (stream) {
+      connectWithUser(userToCall, roomId, stream)
+      setCallStarted(true)
+    }
   }
+
+  const connectWithUser = (userId: string, roomId: string, stream: MediaStream) => {
+    if (peer) {
+      const call = peer.call(userId, stream, {
+        metadata: {roomId}
+      })
+      if (call) {
+        call.on('stream', async(userVideoStream: MediaStream) => {
+          await addVideoStream(videoRefMember.current!, userVideoStream)
+        })
+        call.on('close', () => {
+          removeMemberVideo()
+        })
+      }
+    }
+  }
+
+  const createStream = async() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+      })
+
+      addVideoStream(videoRef.current, stream)
+      return stream
+    }
+  }
+
+  const acceptCall = async() => {
+    if (callRequest) {
+      const stream = await createStream()
+      callRequest.callInstance.answer(stream)
+      callRequest.callInstance.on('stream', (userVideoStream: MediaStream) => {
+        addVideoStream(videoRefMember.current!, userVideoStream)
+      })
+      setCallStarted(true)
+    }
+  }
+
+  const declineCall = () => {}
 
   const addVideoStream = async(video: HTMLVideoElement, stream: MediaStream) => {
     video.srcObject = stream
@@ -27,33 +116,13 @@ export const useCall = () => {
     videoRefMember.current?.remove()
   }
 
-  const onCallUser = (roomId: string, userToCall: string) => {
-    const myPeer = new PeerService(user.id, {
-      startCall: () => startCall(userToCall),
-      addVideoStream: (stream: MediaStream) => addVideoStream(videoRefMember.current!, stream),
-      removeMemberVideo
-    })
-    setPeerInstance(myPeer)
-  }
-
-  const initVideoCall = async(userToCall: string) => {
-    if (videoRef.current) {
-      videoRef.current.muted = true
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      })
-  
-      addVideoStream(videoRef.current!, stream)
-      // peerInstance?.connectWithUser(userToCall, stream)
-    }
-  }
-
-
   return {
     videoRef,
     videoRefMember,
     callStarted,
-    onCallUser
+    callRequest,
+    onCallUser,
+    acceptCall,
+    declineCall
   }
 }
