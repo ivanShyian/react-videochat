@@ -1,5 +1,5 @@
-import { ChatsState, ChatsAction, ChatsActionEnum } from './types'
-import { IChatsMap } from '@/models/IChat'
+import {ChatsAction, ChatsActionEnum, ChatsState} from './types'
+import {IChatsMap} from '@/models/IChat'
 
 const initialState: ChatsState = {
   isLoading: false,
@@ -28,6 +28,26 @@ export default function chatsReducer(state = initialState, action: ChatsAction):
           [action.payload.chatroom_id]: {
             ...state.chats[action.payload.chatroom_id],
             lastMessage: action.payload
+          }
+        }
+      }
+    }
+    case ChatsActionEnum.SET_IS_ONLINE: {
+      let onlineChatId
+      for (const [chatKey, chatValue] of Object.entries(state.chats)) {
+        if (chatValue.member.id === action.payload.userId) {
+          // console.log(action.payload)
+          onlineChatId = chatKey
+        }
+      }
+      if (!onlineChatId) return state
+      return {
+        ...state,
+        chats: {
+          ...state.chats,
+          [onlineChatId]: {
+            ...state.chats[onlineChatId],
+            isOnline: action.payload.value
           }
         }
       }

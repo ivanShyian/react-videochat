@@ -1,5 +1,5 @@
 import { useTypedSelector } from '@/use/useTypedSelector'
-import React, {FC, useState} from 'react'
+import React, {FC} from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import TheSidebar from '../TheSidebar'
 import { useChat, UseChatType } from '@/use/useChat'

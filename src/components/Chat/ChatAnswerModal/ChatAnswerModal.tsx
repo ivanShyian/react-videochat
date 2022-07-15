@@ -1,5 +1,5 @@
 import SButton from '@/components/Shared/SButton';
-import { useCallContext } from '@/use/useCallContext';
+import { usePeerContext } from '../../../context/PeerContext';
 import { useTypedSelector } from '@/use/useTypedSelector';
 import objectHasOwnProperty from '@/utils/objectHasOwnProperty';
 import React, { FC, useEffect, useMemo, useState } from 'react';
@@ -9,18 +9,18 @@ ReactModal.setAppElement(document.getElementById('root')!)
 
 export const ChatAnswerModal: FC = () => {
   const [isModalOpen, changeModalVisibility] = useState(false)
-  const {callRequest, acceptCall, declineCall} = useCallContext()
+  const {callRequest, acceptCall, declineCall} = usePeerContext()
   const {chats} = useTypedSelector(selector => selector.chats)
 
   const callerName = useMemo(() => {
     if (callRequest) {
       return objectHasOwnProperty(chats, callRequest?.roomId) && chats[callRequest.roomId].member.nickname
     }
-    return 'Unknow user'
+    return 'Unknown user'
   }, [callRequest, chats])
 
   useEffect(() => {
-    if (callRequest !== null) {
+    if (callRequest) {
       return changeModalVisibility(true)
     }
   }, [callRequest])

@@ -28,7 +28,10 @@ export const TheSidebarChats: FC = () => {
               className="sidebar__chats_item px-4 border-b pb-2 border-white/20 cursor-pointer hover:bg-white/5"
               onClick={() => navigate(`/chats/${chat.id}`)}
             >
-              <p className="text-lg text-blue-200 block">{chat.member.nickname}</p>
+              <p className="text-lg text-blue-200 flex justify-between items-center">
+                <span>{chat.member.nickname}</span>
+                {chat.isOnline && <span className="text-xs text-blue-200/70">online</span>}
+              </p>
               <p className="flex justify-between items-end text-sm -mt-1 whitespace-nowrap overflow-hidden text-ellipsis text-white/60">
                 {
                   chat.lastMessage

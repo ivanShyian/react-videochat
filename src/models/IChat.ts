@@ -6,6 +6,7 @@ export interface IChat {
   id: string
   lastMessage: null | IMessage
   member: IUser
+  isOnline?: boolean
 }
 
 export interface IChatsMap {

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo, FC } from 'react'
 import { useTypedSelector } from '@/use/useTypedSelector'
-import SocketService from '../services/SocketService'
 import { useActions } from './useActions'
 import { ChatsActionCreators } from '@/store/reducers/chats/action-creators'
 import { IChat } from '@/models/IChat'
 import { MessagesActionCreators } from '@/store/reducers/messages/action-creators'
 import { UsersActionCreators } from '@/store/reducers/users/action-creators'
 import { useNavigate, useParams } from 'react-router-dom'
+import SocketServiceClass from '../services/SocketService'
+import {useCookies} from 'react-cookie'
 
 export enum UseChatType {
   Actions = 'actions',
@@ -26,21 +27,24 @@ const actionCreatorList = [
   UsersActionCreators.setQuery
 ]
 
+let SocketService: SocketServiceClass
+
 export const useChat = (type = UseChatType.Actions): ReturnStatement => {
   const navigate = useNavigate()
   const {chatId} = useParams()
+  const [cookies]  = useCookies(['sid'])
   const {chats, isChatsFetched} = useTypedSelector(selector => selector.chats)
   const {user} = useTypedSelector(selector => selector.auth)
   const {messages} = useTypedSelector(selector => selector.messages)
   const {getChats, getMessagesByChat, createChatWithUser, setQuery} = useActions(...actionCreatorList)
-
   const [currentChat, setCurrentChat] = useState<IChat>({} as IChat)
 
   const chatsExists = useMemo(() => !!Object.keys(chats).length, [chats])
 
   useEffect(() => {
     if (type === UseChatType.Init) {
-      (async() => {
+      SocketService = new SocketServiceClass('ws://localhost:8080', user.id, cookies?.sid as string)
+      ;(async() => {
         await getChats()
         SocketService.connect()
       })();

@@ -2,7 +2,7 @@ import { IChat, IChatsMap } from 'src/models/IChat';
 import { AppendChatAction, ChatsActionEnum, SetChatsAction, SetErrorAction, SetIsFetchedAction, SetIsLoadingAction, UpdateChatLastMessageAction } from './types';
 import axiosClient from '@/api/axios'
 import api from '@/api/routes'
-import { AppDispatch } from 'src/store';
+import {AppDispatch, RootState, ThunkArgs} from 'src/store'
 import { bindActionCreators } from 'redux';
 import { UsersActionCreators } from '../users/action-creators';
 import { IUser } from '@/models/IUser';
@@ -14,6 +14,7 @@ export const ChatsActionCreators = {
   setIsLoading: (loading: boolean): SetIsLoadingAction => ({type: ChatsActionEnum.SET_IS_LOADING, payload: loading}),
   setIsFetched: (fetched: boolean): SetIsFetchedAction => ({type: ChatsActionEnum.SET_FETCHED, payload: fetched}),
   setChats: (chats: IChatsMap): SetChatsAction => ({type: ChatsActionEnum.SET_CHATS, payload: chats}),
+  setIsOnline: (userId: string, value: boolean) => ({type: ChatsActionEnum.SET_IS_ONLINE, payload: {userId, value}}),
   appendChat: (chat: IChatsMap): AppendChatAction => ({type: ChatsActionEnum.APPEND_CHAT, payload: chat}),
   updateLastMessage: (message: IMessage): UpdateChatLastMessageAction => ({type: ChatsActionEnum.UPDATE_CHAT, payload: message}),
 

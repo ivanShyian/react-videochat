@@ -14,7 +14,8 @@ export enum ChatsActionEnum {
   SET_ERROR = 'SET_ERROR',
   SET_IS_LOADING = 'SET_IS_LOADING',
   UPDATE_CHAT = 'UPDATE_CHAT',
-  APPEND_CHAT = 'APPEND_CHAT'
+  APPEND_CHAT = 'APPEND_CHAT',
+  SET_IS_ONLINE = 'SET_IS_ONLINE'
 }
 
 export interface SetChatsAction {
@@ -47,5 +48,13 @@ export interface SetIsLoadingAction {
   payload: boolean
 }
 
+export interface SetIsOnline {
+  type: ChatsActionEnum.SET_IS_ONLINE,
+  payload: {
+    userId: string
+    value: boolean
+  }
+}
+
 export type ChatsAction = 
-  SetErrorAction | SetChatsAction | SetIsLoadingAction | UpdateChatLastMessageAction | SetIsFetchedAction | AppendChatAction
+  SetErrorAction | SetChatsAction | SetIsLoadingAction | UpdateChatLastMessageAction | SetIsFetchedAction | AppendChatAction | SetIsOnline

@@ -29,7 +29,7 @@ export const TheSidebarMembers: FC = () => {
           <li
             className={`text-center text-red-300 text-md px-4 flex items-center relative z-0 border-b border-white/20
             ${showNotFoundMessage ? 'h-16 opacity-100' : 'h-0 opacity-0'} transition-all ease-in-out`}
-          >Cannot find users whith given query &#129313;</li>
+          >Cannot find users with given query &#129313;</li>
         </ul>
       </section>
   )
