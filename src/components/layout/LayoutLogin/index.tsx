@@ -1,4 +1,4 @@
-import {LayoutLogin} from '@/components/Layout/LayoutLogin/LayoutLogin'
+import {LayoutLogin} from './LayoutLogin'
 
 
 export default LayoutLogin

@@ -1,4 +1,4 @@
-import {LayoutProtected} from '@/components/Layout/LayoutProtected/LayoutProtected'
+import {LayoutProtected} from './LayoutProtected'
 
 
 export default LayoutProtected
