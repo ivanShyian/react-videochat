@@ -12,7 +12,7 @@ export default function chatsReducer(state = initialState, action: ChatsAction):
   switch(action.type) {
     case ChatsActionEnum.SET_CHATS:
       return {...state, chats: action.payload}
-    case ChatsActionEnum.APPEND_CHAT:
+    case ChatsActionEnum.APPEND_CHAT: {
       return {
         ...state,
         chats: {
@@ -20,6 +20,7 @@ export default function chatsReducer(state = initialState, action: ChatsAction):
           ...action.payload
         }
       }
+    }
     case ChatsActionEnum.UPDATE_CHAT: {
       return {
         ...state,
@@ -36,7 +37,6 @@ export default function chatsReducer(state = initialState, action: ChatsAction):
       let onlineChatId
       for (const [chatKey, chatValue] of Object.entries(state.chats)) {
         if (chatValue.member.id === action.payload.userId) {
-          // console.log(action.payload)
           onlineChatId = chatKey
         }
       }
@@ -49,6 +49,28 @@ export default function chatsReducer(state = initialState, action: ChatsAction):
             ...state.chats[onlineChatId],
             isOnline: action.payload.value
           }
+        }
+      }
+    }
+    case ChatsActionEnum.ADD_CALL_DATA: {
+      return {
+        ...state,
+        chats: {
+          ...state.chats,
+          [action.payload.roomId]: {
+            ...state.chats[action.payload.roomId],
+            callData: action.payload.callData
+          }
+        }
+      }
+    }
+    case ChatsActionEnum.REMOVE_CALL_DATA: {
+      const {callData, ...data} = state.chats[action.payload.roomId]
+      return {
+        ...state,
+        chats: {
+          ...state.chats,
+          [action.payload.roomId]: data
         }
       }
     }

@@ -1,11 +1,11 @@
 import './index.css'
 import {Navigate, Route, Routes} from 'react-router-dom'
-import Login from '../Pages/Login'
-import Registration from '../Pages/Registration'
-import LayoutLogin from '../Layout/LayoutLogin'
-import LayoutProtected from '../Layout/LayoutProtected'
-import Chats from '../Pages/Chats'
-import ChatsChat from '../Pages/ChatsChat'
+import Login from '../pages/Login'
+import Registration from '../pages/Registration'
+import LayoutLogin from '../layout/LayoutLogin'
+import LayoutProtected from '../layout/LayoutProtected'
+import Chats from '../pages/Chats'
+import ChatsChat from '../pages/ChatsChat'
 
 function App() {
 

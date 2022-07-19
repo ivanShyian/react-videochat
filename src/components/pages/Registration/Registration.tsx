@@ -2,8 +2,8 @@ import { useActions } from '@/use/useActions';
 import { FC, FormEvent, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { AuthActionCreators } from '@/store/reducers/auth/action-creators';
-import SButton from "@/components/Shared/SButton";
-import SInput from "@/components/Shared/SInput";
+import SButton from "@/components/shared/SButton";
+import SInput from "@/components/shared/SInput";
 
 type LocationState = null | {
   prevPath: string

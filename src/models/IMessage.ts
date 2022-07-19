@@ -12,3 +12,10 @@ export interface IMessage {
   readAt: null | Date
   updatedAt: Date | string | null
 }
+
+export interface IMessageSend {
+  room: string
+  senderId: string
+  receiverId: string
+  message: string
+}

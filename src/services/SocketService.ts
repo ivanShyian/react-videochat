@@ -3,10 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { Cookies } from 'react-cookie'
 import { bindActionCreators, Store } from 'redux'
 import { MessagesActionCreators } from '@/store/reducers/messages/action-creators'
-import { IMessage } from '@/models/IMessage'
+import {IMessage, IMessageSend} from '@/models/IMessage'
 import { ChatsActionCreators } from '@/store/reducers/chats/action-creators'
 import moment from 'moment'
 import objectHasOwnProperty from '@/utils/objectHasOwnProperty'
+import {callEvents} from '@/use/useCall'
+import {ServerToClientEvents, ClientToServerEvents, SocketServerActions, SocketClientActions} from '@/models/ISocket'
 
 let store: Store
 
@@ -16,7 +18,7 @@ export const injectStoreInSockets = (_store: Store) => {
 
 const cookie = new Cookies()
 
-const initializeSocketConnection = (host: string, userId: string, clientId: string) => {
+const initializeSocketConnection = (host: string, userId: string, clientId: string): Socket<ServerToClientEvents, ClientToServerEvents> => {
   return io(host, {
     autoConnect: false,
     path: '/ws',
@@ -28,13 +30,12 @@ const initializeSocketConnection = (host: string, userId: string, clientId: stri
 }
 
 class SocketService {
-  socket: Socket
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>
   clientId: string
   userId: string
   connected: boolean
 
   constructor(host: string, userId: string, clientId?: string | undefined) {
-    console.log(host, userId, clientId)
     this.userId = userId
     this.clientId = clientId === undefined ? uuidv4() : clientId as string
     this.connected = false
@@ -52,13 +53,13 @@ class SocketService {
 
   subscribeEvents() {
     this.socket.on('connect', () => {
-      this.socket.emit('identity', {
+      this.socket.emit(SocketClientActions.Identity, {
         userId: this.userId,
         clientId: this.clientId,
       })
     })
 
-    this.socket.on('online_room_list', (rooms: string[] | []) => {
+    this.socket.on(SocketServerActions.OnlineRoomList, (rooms) => {
       const chats = store.getState().chats.chats
       rooms.forEach((room) => {
         if (objectHasOwnProperty(chats, room)) {
@@ -67,39 +68,56 @@ class SocketService {
       })
     })
 
-    this.socket.on('user_connected_to_room', (userId: string) => {
+    this.socket.on(SocketServerActions.UserConnectedToRoom, (userId) => {
       store.dispatch(ChatsActionCreators.setIsOnline(userId, true))
     })
 
-    this.socket.on('new_message', (content: IMessage) => {
+    this.socket.on(SocketServerActions.NewMessage, (content) => {
       store.dispatch(MessagesActionCreators.setMessage(content.chatroom_id, content))
       store.dispatch(ChatsActionCreators.updateLastMessage(content))
     })
 
-    this.socket.on('join_to_room', (data) => {
-      bindActionCreators(ChatsActionCreators.getSingleChatByRoom, store.dispatch)(data.room)
+    this.socket.on(SocketServerActions.JoinToRoom, ({room}) => {
+      bindActionCreators(ChatsActionCreators.getSingleChatByRoom, store.dispatch)(room)
     })
 
-    this.socket.on('user_disconnected', ({ userId }: {userId: string, room: string}) => {
+    this.socket.on(SocketServerActions.UserDisconnected, ({ userId, room }) => {
       store.dispatch(ChatsActionCreators.setIsOnline(userId, false))
+      callEvents.emit('user_disconnected', room)
+    })
+
+    this.socket.on(SocketServerActions.UserEndCall, ({room}) => {
+      callEvents.emit('end_call', room)
+    })
+
+    this.socket.on(SocketServerActions.UserDeclineCall, ({room}) => {
+      callEvents.emit('declined_call', room)
     })
   }
 
   subscribeToAllChats(rooms: string[]) {
-    this.socket.emit('join', rooms)
+    this.socket.emit(SocketClientActions.Join, rooms)
   }
 
   joinToRoomWithUser(room: string, otherUserId: string) {
-    this.socket.emit('subscribe', { room, otherUserId })
+    this.socket.emit(SocketClientActions.Subscribe, { room, otherUserId })
   }
 
-  leaveFromRoom(room: string) {
-    this.socket.emit('unsubscribe', room)
+  sendMessageToUser(content: IMessageSend) {
+    this.socket.emit(SocketClientActions.Message, content)
   }
 
-  sendMessageToUser(content: any) {
-    this.socket.emit('message', content)
+  emitUserEndCall(roomId: string) {
+    this.socket.emit(SocketClientActions.CallEnd, {room: roomId})
   }
+
+  emitUserDeclineCall(roomId: string) {
+    this.socket.emit(SocketClientActions.CallDeclined, {room: roomId})
+  }
+
+  // leaveFromRoom(room: string) {
+  //   this.socket.emit('unsubscribe', room)
+  // }
 }
 
 export default SocketService

@@ -27,7 +27,7 @@ const actionCreatorList = [
   UsersActionCreators.setQuery
 ]
 
-let SocketService: SocketServiceClass
+export let SocketService: SocketServiceClass
 
 export const useChat = (type = UseChatType.Actions): ReturnStatement => {
   const navigate = useNavigate()

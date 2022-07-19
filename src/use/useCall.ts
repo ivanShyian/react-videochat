@@ -1,150 +1,218 @@
-import {useEffect, useRef, useState, RefObject, useMemo} from 'react'
-import { useTypedSelector } from './useTypedSelector'
-import Peer, { MediaConnection } from 'peerjs'
-import objectHasOwnProperty from '@/utils/objectHasOwnProperty'
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useEffect, useRef, useState, RefObject, useMemo, useCallback} from 'react'
+import {useTypedSelector} from './useTypedSelector'
+import {MediaConnection} from 'peerjs'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useActions} from '@/use/useActions'
+import {ChatsActionCreators} from '@/store/reducers/chats/action-creators'
+import {IChat} from '@/models/IChat'
+import EventEmitter from '@/utils/EventEmiiter'
+import {SocketService} from '@/use/useChat'
+import PeerService, {IAnswerPayload, ICallPayload} from '../services/PeerService'
 
 export interface ICallReturnStatement {
   videoRef: RefObject<HTMLVideoElement>;
   videoRefMember: RefObject<HTMLVideoElement>;
-  callRequest: null | {roomId: string, callerId: string}
   onCallUser: (roomId: string, userToCall: string) => Promise<void>
-  acceptCall: () => void
-  declineCall: () => void
+  acceptCall: (roomId: string) => void
   isCallView: boolean
+  currentChat: IChat | undefined
+  closeCall: () => void
+  declineCall: (roomId: string) => void
+  toggleAudioStream: () => void
+  toggleVideoStream: () => void
 }
 
-interface ICallInterface {
-  roomId: string,
-  callerId: string
-  callInstance: MediaConnection
+type TCallPayload = ICallPayload & {
+  userVideoStream: MediaStream
+  call: MediaConnection
 }
+
+type TAnswerPayload = IAnswerPayload & {
+  userVideoStream: MediaStream
+}
+
+export let callEvents: EventEmitter
+export let peerEvents: EventEmitter
+let peerService: PeerService
 
 export const useCall = (): ICallReturnStatement => {
+  const params = useParams()
+  const navigate = useNavigate()
   const {user} = useTypedSelector(selector => selector.auth)
   const {chats} = useTypedSelector(selector => selector.chats)
-  const [isCallView, setCallView] = useState<boolean>(false)
-  const [callRequester, setCallRequester] = useState<{roomId: string, userToCall: string} | null>(null)
-  const [callRequest, setCallRequest] = useState<ICallInterface | null>(null)
-  const [peer, setPeer] = useState<Peer | null>(null)
+  const {addCallData, removeCallData} = useActions(ChatsActionCreators.addCallData, ChatsActionCreators.removeCallData)
+  const [peerExists, setPeerExists] = useState<boolean>(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const videoRefMember = useRef<HTMLVideoElement>(null)
+  const [isCallView, setCallView] = useState<boolean>(false)
 
+  const currentChat = useMemo(() => {
+    if (params && params.chatId && chats[params.chatId]) {
+      return chats[params.chatId]
+    }
+    return undefined
+  }, [chats, params])
+
+
+  // Init
+  useEffect(() => {
+    if (!peerExists) {
+      initPeer()
+      initPeerEmitter()
+    }
+  }, [])
 
   useEffect(() => {
-    if (peer) return
-
-    const myPeer = new Peer(user.id, {
-      host: 'localhost',
-      port: 3001,
-      path: '/',
-      secure: false,
-      debug: 3
-    })
-
-    // myPeer.on('open', (id: string) => {
-    // })
-
-    myPeer.on('call', async(call) => {
-      setCallRequest({
-        callInstance: call,
-        roomId: call.metadata.roomId,
-        callerId: call.peer
-      })
-    })
-
-    myPeer.on('error', (err) => {
-      console.log({err})
-    })
-
-
-    setPeer(myPeer)
-  }, [])
+    if (chats) {
+      initSocketEmitter()
+    }
+  }, [chats])
 
   // Caller
   useEffect(() => {
-    if (isCallView && callRequester) {
-      createStreamAndConnectWithUser(callRequester.userToCall, callRequester.roomId)
+    if (currentChat?.callData?.type === 'caller' && params.chatId && videoRef.current) {
+      if (videoRef.current.srcObject instanceof MediaStream) return
+      connectWithUser(currentChat.callData.receiverId!, params.chatId)
     }
-  }, [isCallView])
+  }, [isCallView, currentChat])
 
   // Receiver
   useEffect(() => {
-    if (isCallView && callRequest && videoRef.current) {
+    if (isCallView && currentChat?.callData?.type === 'receiver' && videoRef.current) {
+      if (videoRef.current.srcObject instanceof MediaStream) return
       acceptCallStream()
     }
-  }, [isCallView && callRequest && videoRef.current])
+  }, [isCallView, currentChat])
 
-  const onCallUser = async(roomId: string, userToCall: string) => {
-    // chats && objectHasOwnProperty(chats, roomId) && chats[roomId].isOnline
-    if (chats && objectHasOwnProperty(chats, roomId) && chats[roomId].isOnline) {
-      setCallRequester({
-        userToCall,
-        roomId
-      })
-      setCallView(true)
-      return
-    }
-    console.log('nope')
+  // Chat change handling
+  useEffect(() => {
+    setCallView(!!(params.chatId && currentChat?.callData))
+  }, [params])
+
+  const initSocketEmitter = () => {
+    callEvents = new EventEmitter()
+
+    callEvents.on('end_call', endCall)
+    callEvents.on('user_disconnected', (roomId: string) => {
+      if (chats[roomId]?.callData) endCall()
+    })
+    callEvents.on('declined_call', (room) => {
+      endCall(room)
+      // @TODO Notify that user declined call
+    })
   }
 
-  const createStreamAndConnectWithUser = async(userToCall: string, roomId: string) => {
-    const stream = await createStream()
-    console.log({ stream })
-    if (stream) {
-      connectWithUser(userToCall, roomId, stream)
-      return
+  const initPeerEmitter = () => {
+    peerEvents = new EventEmitter()
+
+    peerEvents.on('onCallReceive', (payload: {call: MediaConnection, callerId: string, roomId: string, type: string}) => {
+      const {roomId, ...callPayload} = payload
+      addCallData(roomId, {...callPayload})
+    })
+
+    peerEvents.on('peerStream', async(payload: TCallPayload) => {
+      const {callData, ...streamPayload} = payload
+      await injectMyVideoStream(streamPayload.myVideoStream)
+      await addVideoStream(videoRefMember.current!, streamPayload.userVideoStream)
+      addCallData(streamPayload.roomId, {
+        ...callData,
+        ...streamPayload
+      })
+    })
+
+    peerEvents.on('onCallClose', endCall)
+  }
+
+  const initPeer = () => {
+    peerService = new PeerService(user.id)
+    setPeerExists(!!peerService.getPeerInstance)
+  }
+
+  const onCallUser = async(roomId: string, receiverId: string) => {
+    if (currentChat?.isOnline) {
+      addCallData(roomId, {
+        receiverId,
+        type: 'caller'
+      })
+      return setCallView(true)
     }
   }
 
-  const connectWithUser = (userId: string, roomId: string, stream: MediaStream) => {
-    console.log(peer)
-    if (peer) {
-      const call = peer.call(userId, stream, {
-        metadata: {roomId}
-      })
-      console.log(call)
-      if (call) {
-        call.on('stream', async(userVideoStream: MediaStream) => {
-          await addVideoStream(videoRefMember.current!, userVideoStream)
-        })
-        call.on('close', () => {
-          removeMemberVideo()
+  const connectWithUser = async(receiverId: string, roomId: string) => {
+    if (peerExists) {
+      if (currentChat?.callData?.userVideoStream && currentChat?.callData?.myVideoStream) {
+        await injectMyVideoStream(currentChat.callData.myVideoStream)
+        return addVideoStream(videoRefMember.current!, currentChat.callData.userVideoStream)
+      }
+      const stream = await createStream()
+      if (stream && currentChat?.callData) {
+        peerService.call({
+          myVideoStream: stream,
+          callData: currentChat.callData,
+          receiverId,
+          roomId
         })
       }
     }
   }
 
   const createStream = async() => {
+    return navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    })
+  }
+
+  const injectMyVideoStream = (stream: MediaStream) => {
     if (videoRef.current) {
       videoRef.current.muted = true
-      console.log(navigator.mediaDevices)
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      })
-      addVideoStream(videoRef.current, stream)
-      return stream
+      return addVideoStream(videoRef.current, stream)
     }
   }
 
-  const acceptCall = () => {
-    if (callRequest) {
-      setCallView(true)
-    }
+  const acceptCall = (roomId: string) => {
+    navigate(`/chats/${roomId}`)
   }
 
   const acceptCallStream = async() => {
-    if (callRequest) {
+    if (currentChat?.callData) {
+      if (currentChat.callData.userVideoStream && currentChat.callData.myVideoStream) {
+        await injectMyVideoStream(currentChat.callData.myVideoStream)
+        return addVideoStream(videoRefMember.current!, currentChat.callData.userVideoStream)
+      }
       const stream = await createStream()
-      callRequest.callInstance.answer(stream)
-      callRequest.callInstance.on('stream', (userVideoStream: MediaStream) => {
-        addVideoStream(videoRefMember.current!, userVideoStream)
-      })
+      if (stream && currentChat.callData.call && params.chatId) {
+        peerService.receiveCall({
+          callData: currentChat.callData,
+          callInstance: currentChat.callData.call,
+          roomId: params.chatId,
+          myVideoStream: stream
+        })
+      }
     }
   }
 
-  const declineCall = () => {}
+  const declineCall = (roomId: string) => {
+    if (roomId) {
+      SocketService.emitUserDeclineCall(roomId)
+      removeCallData(currentChat?.id || params?.chatId || undefined)
+    }
+  }
+
+  const closeCall = () => {
+    if (currentChat?.callData?.call) {
+      currentChat.callData.call.close()
+      SocketService.emitUserEndCall(currentChat.id)
+    }
+  }
+
+  const endCall = useCallback((roomId?: string) => {
+    const room = currentChat?.id || params?.chatId || roomId || undefined
+    videoRefMember.current?.remove()
+    videoRef.current?.remove()
+    setCallView(false)
+    removeCallData(room)
+  }, [currentChat])
 
   const addVideoStream = async(video: HTMLVideoElement, stream: MediaStream) => {
     video.srcObject = stream
@@ -153,17 +221,28 @@ export const useCall = (): ICallReturnStatement => {
     })
   }
 
-  const removeMemberVideo = () => {
-    videoRefMember.current?.remove()
+  const toggleAudioStream = () => {
+    if (currentChat?.callData?.myVideoStream) {
+      currentChat.callData.myVideoStream.getAudioTracks()[0].enabled = !currentChat.callData.myVideoStream.getAudioTracks()[0].enabled
+    }
+  }
+
+  const toggleVideoStream = () => {
+    if (currentChat?.callData?.myVideoStream) {
+      currentChat.callData.myVideoStream.getVideoTracks()[0].enabled = !currentChat.callData.myVideoStream.getVideoTracks()[0].enabled
+    }
   }
 
   return {
     videoRef,
     videoRefMember,
-    callRequest,
     onCallUser,
     acceptCall,
     declineCall,
-    isCallView
+    isCallView,
+    currentChat,
+    closeCall,
+    toggleAudioStream,
+    toggleVideoStream
   }
 }

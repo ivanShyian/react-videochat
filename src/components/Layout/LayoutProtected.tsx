@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 import TheSidebar from '../TheSidebar'
 import { useChat, UseChatType } from '@/use/useChat'
 import { PeerContextProvider } from '../../context/PeerContext'
-import ChatAnswerModal from '../Chat/ChatAnswerModal'
+import ChatAnswerModal from '../Chats/ChatsAnswerModal'
 
 const LayoutProtected: FC = () => {
   const {isAuth} = useTypedSelector(selector => selector.auth)

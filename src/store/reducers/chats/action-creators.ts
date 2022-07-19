@@ -1,5 +1,14 @@
-import { IChat, IChatsMap } from 'src/models/IChat';
-import { AppendChatAction, ChatsActionEnum, SetChatsAction, SetErrorAction, SetIsFetchedAction, SetIsLoadingAction, UpdateChatLastMessageAction } from './types';
+import {IChat, IChatCall, IChatsMap} from 'src/models/IChat'
+import {
+  AddCallData,
+  AppendChatAction,
+  ChatsActionEnum, RemoveCallData,
+  SetChatsAction,
+  SetErrorAction,
+  SetIsFetchedAction,
+  SetIsLoadingAction,
+  UpdateChatLastMessageAction
+} from './types'
 import axiosClient from '@/api/axios'
 import api from '@/api/routes'
 import {AppDispatch, RootState, ThunkArgs} from 'src/store'
@@ -17,6 +26,8 @@ export const ChatsActionCreators = {
   setIsOnline: (userId: string, value: boolean) => ({type: ChatsActionEnum.SET_IS_ONLINE, payload: {userId, value}}),
   appendChat: (chat: IChatsMap): AppendChatAction => ({type: ChatsActionEnum.APPEND_CHAT, payload: chat}),
   updateLastMessage: (message: IMessage): UpdateChatLastMessageAction => ({type: ChatsActionEnum.UPDATE_CHAT, payload: message}),
+  addCallData: (roomId: string, callData: IChatCall): AddCallData => ({type: ChatsActionEnum.ADD_CALL_DATA, payload: {roomId, callData}}),
+  removeCallData: (roomId: string): RemoveCallData => ({type: ChatsActionEnum.REMOVE_CALL_DATA, payload: {roomId}}),
 
   getChats: () => async(dispatch: AppDispatch) => {
     try {
