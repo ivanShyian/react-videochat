@@ -2,7 +2,6 @@ import React, { FC, MouseEvent, useMemo } from "react"
 import { Link } from "react-router-dom"
 import { Props, ButtonTheme, ButtonSize, ButtonType } from "./types"
 
-
 const buttonTheme: { [key in keyof typeof ButtonTheme]: string } = {
   primary: 'bg-orange-400 hover:bg-orange-500 disabled:bg-orange-200 text-white',
   transparent: '!bg-transparent !hover:bg-transparent text-white border-2 border-white'

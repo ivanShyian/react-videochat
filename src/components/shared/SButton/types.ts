@@ -17,6 +17,7 @@ export enum ButtonType {
   link = 'link'
 }
 
+
 export interface Props {
   children: string | ReactNode
   onClick?: () => any

@@ -6,6 +6,7 @@ import { useChat, UseChatType } from '@/use/useChat'
 import { PeerContextProvider } from '../../../context/PeerContext'
 import ChatAnswerModal from '../../Chats/ChatsAnswerModal'
 
+
 export const LayoutProtected: FC = () => {
   const {isAuth} = useTypedSelector(selector => selector.auth)
   useChat(UseChatType.Init)

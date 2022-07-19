@@ -13,6 +13,7 @@ interface Props {
   onKeyDown?: (e: React.KeyboardEvent) => any
 }
 
+
 export const SInput: FC<Props> = ({ value, onChange, id, label, name, placeholder, type, onKeyDown, className = '', inputClassName = '' }) => {
   const classes = `s-input__input outline-none bg-slate-200 h-full px-4 w-full transition duration-300 focus:bg-slate-100 focus:transition focus:duration-0 ${inputClassName}`
 

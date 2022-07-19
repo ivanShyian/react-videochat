@@ -9,6 +9,7 @@ export const LayoutLogin = () => {
     return <Navigate to="/chats" />
   }
 
+
   return (
     <main className="main bg-gradient-to-r from-slate-900 to-pink-800 h-screen flex justify-center items-center layout-login login">
       <div className="card card__login flex relative h-[476px] w-[750px]">
