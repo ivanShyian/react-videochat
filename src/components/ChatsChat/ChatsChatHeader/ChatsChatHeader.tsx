@@ -1,4 +1,4 @@
-import SButton from '@/components/Shared/SButton';
+import SButton from '@/components/shared/SButton';
 import { FC } from 'react';
 import { ReactComponent as ICall } from '@/assets/icons/i-videocall.svg'
 

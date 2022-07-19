@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import SButton from '@/components/Shared/SButton';
+import SButton from '@/components/shared/SButton';
 import { ReactComponent as IVoice } from '@/assets/icons/i-voice.svg'
 
 

@@ -1,4 +1,4 @@
-import SButton from '@/components/Shared/SButton';
+import SButton from '@/components/shared/SButton';
 import { usePeerContext } from '../../../context/PeerContext';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import ReactModal from 'react-modal';
