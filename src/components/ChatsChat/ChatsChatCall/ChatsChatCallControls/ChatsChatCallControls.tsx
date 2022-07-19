@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react'
-import SButton from '@/components/shared/SButton'
+import SButton from '@/components/Shared/SButton'
 import {ReactComponent as IVideoOff} from '@/assets/icons/i-video-off.svg'
 import {ReactComponent as IVideo} from '@/assets/icons/i-videocall.svg'
 import {ReactComponent as IVoice} from '@/assets/icons/i-voice-2.svg'

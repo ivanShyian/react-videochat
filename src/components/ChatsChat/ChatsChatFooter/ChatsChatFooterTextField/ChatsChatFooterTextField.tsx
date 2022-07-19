@@ -1,4 +1,4 @@
-import SInput from '@/components/shared/SInput';
+import SInput from '@/components/Shared/SInput';
 import keyDownHandler from '@/utils/keyDownHandler';
 import React, { FC, Dispatch, SetStateAction, KeyboardEvent, useState, useRef, Component, RefObject, MutableRefObject } from 'react';
 

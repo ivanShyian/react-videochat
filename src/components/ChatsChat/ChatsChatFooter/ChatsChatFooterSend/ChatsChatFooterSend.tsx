@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import SButton from '@/components/shared/SButton';
+import SButton from '@/components/Shared/SButton';
 import { ReactComponent as ISend } from '@/assets/icons/i-send.svg'
 
 interface Props {

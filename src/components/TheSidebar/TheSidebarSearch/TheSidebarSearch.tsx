@@ -1,4 +1,4 @@
-import SInput from '@/components/shared/SInput'
+import SInput from '@/components/Shared/SInput'
 import { useActions } from '@/use/useActions'
 import { useTypedSelector } from '@/use/useTypedSelector'
 import React, {FC, useState} from 'react'

@@ -1,6 +1,6 @@
 import React, { FC, FormEvent, useMemo, useState } from 'react'
-import SButton from '@/components/shared/SButton'
-import SInput from '@/components/shared/SInput'
+import SButton from '@/components/Shared/SButton'
+import SInput from '@/components/Shared/SInput'
 import { useLocation } from 'react-router-dom'
 import { useActions } from '@/use/useActions'
 import { AuthActionCreators } from '@/store/reducers/auth/action-creators'

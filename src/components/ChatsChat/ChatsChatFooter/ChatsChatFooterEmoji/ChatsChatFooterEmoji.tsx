@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { ReactComponent as IEmoji } from '@/assets/icons/i-emoji.svg'
-import SButton from '@/components/shared/SButton';
+import SButton from '@/components/Shared/SButton';
 
 export const ChatFooterEmoji: FC = () => {
   return (

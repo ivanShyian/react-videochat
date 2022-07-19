@@ -1,4 +1,4 @@
-import SInput from '../shared/SInput'
+import SInput from '../Shared/SInput'
 import React, { FC, useState } from 'react';
 
 
