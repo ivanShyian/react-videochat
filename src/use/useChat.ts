@@ -43,7 +43,7 @@ export const useChat = (type = UseChatType.Actions): ReturnStatement => {
 
   useEffect(() => {
     if (type === UseChatType.Init) {
-      SocketService = new SocketServiceClass('ws://localhost:8080', user.id, cookies?.sid as string)
+      SocketService = new SocketServiceClass(import.meta.env.VITE_BASE_URL, user.id, cookies?.sid as string)
       ;(async() => {
         await getChats()
         SocketService.connect()

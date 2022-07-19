@@ -2,7 +2,7 @@ import React from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 import { useTypedSelector } from '@/use/useTypedSelector'
 
-const LayoutLogin = () => {
+export const LayoutLogin = () => {
   const {isAuth} = useTypedSelector(selector => selector.auth)
 
   if (isAuth) {
@@ -19,4 +19,3 @@ const LayoutLogin = () => {
   )
 }
 
-export default LayoutLogin

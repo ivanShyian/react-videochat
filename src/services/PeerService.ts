@@ -14,12 +14,14 @@ export interface IAnswerPayload extends Omit<ICallPayload, 'receiverId'> {
 }
 
 const initializePeer = (userId: string) => {
+  const isLocalhost = import.meta.env.VITE_PEERJS_HOST === 'localhost'
+
   return new Peer(userId, {
-    host: 'localhost',
-    port: 3001,
+    host: import.meta.env.VITE_PEERJS_HOST,
+    port: import.meta.env.VITE_PEERJS_PORT,
     path: '/peerjs',
-    secure: false,
-    // debug: 3
+    secure: !isLocalhost,
+    debug: 3
   })
 }
 

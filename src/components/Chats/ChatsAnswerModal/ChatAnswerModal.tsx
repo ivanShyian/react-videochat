@@ -27,7 +27,7 @@ export const ChatAnswerModal: FC = () => {
 
   useEffect(() => {
     const call = caller?.callData
-    if (call?.type === 'receiver' && !call.videoStream && !isCallView) {
+    if (call?.type === 'receiver' && !call.myVideoStream && !isCallView) {
       return changeModalVisibility(true)
     }
   }, [caller])
