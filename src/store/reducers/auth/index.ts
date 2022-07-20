@@ -1,6 +1,6 @@
-import { AuthState, AuthAction, AuthActionEnum } from './types'
-import { IUser, IUserToken } from 'src/models/IUser'
-import { Cookies } from 'react-cookie'
+import {AuthAction, AuthActionEnum, AuthState} from './types'
+import {TRegistrationResult, IUser, IUserToken} from 'src/models/IUser'
+import {Cookies} from 'react-cookie'
 
 const cookies = new Cookies()
 const userData = cookies.get('userData')
@@ -21,6 +21,7 @@ const initialState: AuthState = {
   isAuth: hasData ?? false,
   error: '',
   isLoading: false,
+  registrationResult: null,
   user: parsedCookies(hasData, userData).user,
   token: parsedCookies(hasData, userData).token
 }
@@ -37,6 +38,8 @@ export default function authReducer(state = initialState, action: AuthAction): A
       return {...state, isLoading: action.payload}
     case AuthActionEnum.SET_ERROR:
       return {...state, error: action.payload, isLoading: false}
+    case AuthActionEnum.SET_REGISTRATION_RESULT:
+      return {...state, registrationResult: action.payload}
     default:
       return state
   }

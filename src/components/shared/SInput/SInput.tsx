@@ -18,7 +18,7 @@ export const SInput: FC<Props> = ({ value, onChange, id, label, name, placeholde
   const classes = `s-input__input outline-none bg-slate-200 h-full px-4 w-full transition duration-300 focus:bg-slate-100 focus:transition focus:duration-0 ${inputClassName}`
 
   return (
-    <div className={`s-input rounded-2xl overflow-hidden h-10 ${className}`}>
+    <div className={`s-input rounded-2xl overflow-hidden h-8 ${className}`}>
       {label && <label htmlFor={id}>{label}</label>}
       {type === 'textarea' ? (
         <textarea

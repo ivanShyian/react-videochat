@@ -8,3 +8,8 @@ export interface IUserToken {
   accessToken: string
   refreshToken: string
 }
+
+export type TRegistrationResult = null | {
+  success: boolean
+  message: string
+}

@@ -1,25 +1,39 @@
 import { useActions } from '@/use/useActions';
-import { FC, FormEvent, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import {FC, FormEvent, useEffect, useMemo, useState} from 'react'
+import {useLocation, useNavigate} from 'react-router-dom'
 import { AuthActionCreators } from '@/store/reducers/auth/action-creators';
 import SButton from "@/components/shared/SButton";
 import SInput from "@/components/shared/SInput";
+import {useTypedSelector} from '@/use/useTypedSelector'
 
 type LocationState = null | {
   prevPath: string
 } 
 
 export const Registration: FC = () => {
+  const navigate = useNavigate()
   const location = useLocation()
   const [nickname, changeNickname] = useState('')
   const [email, changeEmail] = useState('')
   const [password, changePassword] = useState('')
   const [repeatPassword, changeRepeatPassword] = useState('')
   const {signup} = useActions(AuthActionCreators.signup)
+  const {registrationResult} = useTypedSelector(selector => selector.auth)
+
+  useEffect(() => {
+    if (registrationResult?.message) {
+      if (registrationResult?.success) {
+        navigate('/login?auth=1')
+        return
+      }
+      clearRegistrationFields()
+    }
+  }, [registrationResult])
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (submitButtonActive && passwordsIsEqual) {
+      //TODO Divide passwordIsEqual logic to check after button submit
       signup(nickname, email, password)
     }
   }
@@ -34,8 +48,15 @@ export const Registration: FC = () => {
 
   const locationState = useMemo(() => location.state as LocationState, [location])
 
+  const clearRegistrationFields = () => {
+    changeNickname('')
+    changeEmail('')
+    changePassword('')
+    changeRepeatPassword('')
+  }
+
   return (
-    <div className="registration">
+    <div className="registration mx-auto md:mx-0">
       {locationState?.prevPath && (
         <div className="registration__back absolute top-6 left-6">
           <SButton
@@ -43,13 +64,13 @@ export const Registration: FC = () => {
             to="/login"
             size="small"
             theme="transparent"
-            className="border-none"
+            className="border-none text-white/80 hover:text-white/100"
           >
             &#8592; Back to login
           </SButton>
         </div>
       )}
-      <p className="registration__title font-bold text-2xl mb-5">Member registration</p>
+      <p className="registration__title font-semibold text-xl text-center mb-5 text-white">Member registration</p>
       <form
         className="registration__form"
         onSubmit={handleSubmit}
@@ -84,12 +105,13 @@ export const Registration: FC = () => {
           placeholder="Repeat password"
           onChange={changeRepeatPassword}
           type="password"
-          className="mb-4"
+          className="mb-5"
         />
         <SButton
-          className="w-full"
-          disabled={!submitButtonActive}
+          className="w-9/12 block mx-auto"
+          isDisabled={!submitButtonActive}
           type="submit"
+          theme="transparent"
         >
           Sign up
         </SButton>

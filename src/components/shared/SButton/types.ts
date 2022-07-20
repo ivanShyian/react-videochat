@@ -1,8 +1,8 @@
 import { ReactNode } from "react"
 
 export const enum ButtonTheme {
-  primary,
-  transparent
+  primary = 'primary',
+  transparent = 'transparent'
 }
 
 export const enum ButtonSize {
@@ -21,7 +21,8 @@ export enum ButtonType {
 export interface Props {
   children: string | ReactNode
   onClick?: () => any
-  disabled?: boolean
+  isDisabled?: boolean
+  isLoading?: boolean
   to?: string | {pathname: string, state?: any}
   type?: keyof typeof ButtonType
   theme?: keyof typeof ButtonTheme

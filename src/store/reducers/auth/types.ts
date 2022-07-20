@@ -1,4 +1,4 @@
-import { IUser, IUserToken } from 'src/models/IUser'
+import {TRegistrationResult, IUser, IUserToken} from 'src/models/IUser'
 
 export interface AuthState {
   isAuth: boolean
@@ -6,6 +6,7 @@ export interface AuthState {
   isLoading: boolean
   error: string
   token: IUserToken
+  registrationResult: TRegistrationResult
 }
 
 export enum AuthActionEnum {
@@ -14,7 +15,8 @@ export enum AuthActionEnum {
   SET_USER = 'SET_USER',
   SET_USER_TOKEN = 'SET_USER_TOKEN',
   SET_USER_AND_TOKEN = 'SET_USER_AND_TOKEN',
-  SET_IS_LOADING = 'SET_IS_LOADING'
+  SET_IS_LOADING = 'SET_IS_LOADING',
+  SET_REGISTRATION_RESULT = 'SET_REGISTRATION_RESULT'
 }
 
 export interface SetIsAuthAction {
@@ -42,5 +44,10 @@ export interface SetIsLoadingAction {
   payload: boolean
 }
 
+export interface SetRegistrationResult {
+  type: AuthActionEnum.SET_REGISTRATION_RESULT,
+  payload: TRegistrationResult
+}
+
 export type AuthAction = 
-  SetIsAuthAction | SetErrorAction | SetUserAction | SetIsLoadingAction | SetUserTokenAction
+  SetIsAuthAction | SetErrorAction | SetUserAction | SetIsLoadingAction | SetUserTokenAction | SetRegistrationResult

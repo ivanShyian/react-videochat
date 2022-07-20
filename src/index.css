@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
+:root {
+  --toastify-color-dark: rgba(0, 0, 0, .25);
+}
+
 html {
   @apply h-screen;
 }
@@ -11,7 +16,7 @@ body, #root, .App, .layout-default {
 }
 
 .card {
-  @apply rounded-lg bg-white/30 p-10;
+  @apply blurred-bg h-full w-full md:h-auto md:w-auto my-auto md:rounded-lg md:border md:border-white/20;
 }
 
 .card__login {
@@ -35,4 +40,15 @@ body, #root, .App, .layout-default {
 /* Handle on hover */
 .pretty-scrollbar::-webkit-scrollbar-thumb:hover {
   @apply bg-[#5c1434];
+}
+
+.blurred-bg {
+  @apply overflow-hidden relative z-10 before:bg-black/20 before:absolute before:inset-0 before:z-[-1] before:blur-lg;
+}
+.blurred-bg-white {
+  @apply overflow-hidden relative z-10 before:bg-white/20 before:absolute before:inset-0 before:z-[-1] before:blur-lg;
+}
+
+.bg-slate-to-pink {
+  @apply bg-gradient-to-r from-slate-900 to-pink-800;
 }
