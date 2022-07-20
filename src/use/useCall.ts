@@ -27,10 +27,6 @@ type TCallPayload = ICallPayload & {
   call: MediaConnection
 }
 
-type TAnswerPayload = IAnswerPayload & {
-  userVideoStream: MediaStream
-}
-
 export let callEvents: EventEmitter
 export let peerEvents: EventEmitter
 let peerService: PeerService
@@ -58,12 +54,12 @@ export const useCall = (): ICallReturnStatement => {
   useEffect(() => {
     if (!peerExists) {
       initPeer()
-      initPeerEmitter()
     }
   }, [])
 
   useEffect(() => {
     if (chats) {
+      initPeerEmitter()
       initSocketEmitter()
     }
   }, [chats])
@@ -208,11 +204,21 @@ export const useCall = (): ICallReturnStatement => {
 
   const endCall = useCallback((roomId?: string) => {
     const room = currentChat?.id || params?.chatId || roomId || undefined
-    videoRefMember.current?.remove()
-    videoRef.current?.remove()
-    setCallView(false)
-    removeCallData(room)
+    if (room && chats[room]) {
+      videoRefMember.current?.remove()
+      videoRef.current?.remove()
+      removeTracks(chats[room])
+      setCallView(false)
+      removeCallData(room)
+    }
   }, [currentChat])
+
+  const removeTracks = (chat: IChat) => {
+    chat.callData?.myVideoStream?.getTracks().forEach((track) => {
+      console.log(track)
+      track.stop()
+    })
+  }
 
   const addVideoStream = async(video: HTMLVideoElement, stream: MediaStream) => {
     video.srcObject = stream

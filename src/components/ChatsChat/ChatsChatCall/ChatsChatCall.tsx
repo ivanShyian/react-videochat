@@ -13,7 +13,7 @@ interface IChatChatCall {
 
 export const ChatsChatCall: FC<IChatChatCall> = ({videoRefMember, videoRef, closeCall, toggleVideo, toggleAudio, callData}) => {
   return (
-    <div className="chats-call mr-5 my-5 w-full h-[calc(100%_-_40px)] flex flex-col">
+    <div className="chats-call mr-5 ml-5 md:ml-0 my-5 w-[calc(100%_-_70px)] md:w-[calc(100%_-_35px)] h-[calc(100%_-_35px)] flex flex-col">
       <div className="chat-call__wrapper h-[calc(100%_-_80px)] flex flex-col xl:flex-row">
         <div className="chat-call__video mb-5 flex-1 h-[calc(50%_-_10px)] block xl:block xl:h-full xl:my-auto xl:mr-5">
           <video
