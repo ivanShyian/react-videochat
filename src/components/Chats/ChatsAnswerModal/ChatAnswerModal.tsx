@@ -60,19 +60,19 @@ export const ChatAnswerModal: FC = () => {
           zIndex: 50
         }
       }}
-      className="w-25 bg-gray-900/80 backdrop-blur-sm border border-white/20  rounded-xl"
+      className="bg-gray-900/80 backdrop-blur-sm border border-white/20 rounded-xl absolute inset-x-8 md:static"
     >
-      <div className="flex flex-col text-white p-10 text-center">
+      <div className="flex flex-col text-white p-6 md:p-10 text-center">
         <p className="mb-4 text-blue-200"><b className="text-xl">{callerName}</b> is calling to you!</p>
         <p className="text-xl text-blue-200 mb-10">Accept call?</p>
-        <div>
+        <div className="flex flex-col md:flex-row">
           <SButton
-            className="mr-10 border-green-500 text-green-500"
+            className="mr-0 mb-4 md:mb-0 md:mr-10 !border-green-500 text-green-500"
             theme="transparent"
             onClick={handleAcceptCall}
           >Accept</SButton>
           <SButton
-            className="border-red-500 text-red-500"
+            className="!border-red-500 text-red-500"
             theme="transparent"
             onClick={closeModal}
           >Decline</SButton>

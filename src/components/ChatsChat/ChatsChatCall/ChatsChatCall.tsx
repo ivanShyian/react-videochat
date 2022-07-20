@@ -18,14 +18,14 @@ export const ChatsChatCall: FC<IChatChatCall> = ({videoRefMember, videoRef, clos
         <div className="chat-call__video mb-5 flex-1 h-[calc(50%_-_10px)] block xl:block xl:h-full xl:my-auto xl:mr-5">
           <video
             className="rounded-xl overflow-hidden mx-auto w-auto h-full xl:w-auto xl:h-full"
-            // src={'http://www.w3schools.com/html/mov_bbb.mp4'}
+            playsInline={true}
             ref={videoRefMember}
           />
         </div>
         <div className="chat-call__video flex-1 h-[calc(50%_-_10px)] block xl:block xl:h-full xl:my-auto">
           <video
             className="rounded-xl overflow-hidden mx-auto w-auto h-full xl:w-auto xl:h-full"
-            // src={'http://www.w3schools.com/html/mov_bbb.mp4'}
+            playsInline={true}
             ref={videoRef}
           />
         </div>
