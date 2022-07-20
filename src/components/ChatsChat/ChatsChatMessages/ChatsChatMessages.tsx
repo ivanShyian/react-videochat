@@ -18,8 +18,7 @@ interface IChatChatBox {
 export const ChatsChatMessages: FC<IChatChatBox> = ({handleCall, member, messages, chat, userId, sendMessage}) => {
   return (
     <div className="chat w-full h-full">
-      <div
-        className="chat__wrapper relative rounded-xl overflow-hidden border border-white/20 h-[calc(100%_-_40px)] w-[calc(100%_-_20px)] m-5 ml-0">
+      <div className="chat__wrapper relative rounded-xl overflow-hidden border border-white/20 h-[calc(100%_-_40px)] w-[calc(100%_-_40px)] md:w-[calc(100%_-_20px)] m-5 ml-5 md:ml-0">
         <div className="chat__content relative z-10 flex flex-col justify-between h-full">
           <ChatsChatHeader
             onCall={handleCall}

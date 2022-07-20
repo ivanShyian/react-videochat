@@ -8,7 +8,7 @@
 }
 
 html {
-  @apply h-screen;
+  @apply h-full md:h-screen;
 }
 
 body, #root, .App, .layout-default {
@@ -20,7 +20,7 @@ body, #root, .App, .layout-default {
 }
 
 .card__login {
-  @apply pt-20 pb-6 pl-16 pr-24;
+  @apply pt-20 pb-6 md:pl-16 md:pr-24;
 }
 
 .pretty-scrollbar::-webkit-scrollbar {

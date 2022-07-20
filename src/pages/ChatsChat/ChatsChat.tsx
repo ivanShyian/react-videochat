@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom'
 import {useTypedSelector} from '@/use/useTypedSelector'
 import {useChat, UseChatType} from '@/use/useChat'
 import ChatsChatCall from '@/components/ChatsChat/ChatsChatCall'
-import {usePeerContext} from '../../../context/PeerContext'
+import {usePeerContext} from '../../context/PeerContext'
 import ChatsChatMessages from '@/components/ChatsChat/ChatsChatMessages'
 
 export const ChatsChat: FC = () => {
