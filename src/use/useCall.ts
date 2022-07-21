@@ -214,6 +214,7 @@ export const useCall = (): ICallReturnStatement => {
     const room = currentChat?.id || params?.chatId || roomId || undefined
     const chat = !!room && chats[room]
     if (chat) {
+      chat.callData?.call?.off('close')
       if (videoRef.current && videoRefMember.current) {
         videoRefMember.current.remove()
         videoRef.current.remove()
