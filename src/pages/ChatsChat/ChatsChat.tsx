@@ -34,7 +34,7 @@ export const ChatsChat: FC = () => {
     return (
       <ChatsChatMessages
         handleCall={handleCall}
-        member={currentChat.member}
+        member={currentChat?.member}
         chat={chats[chatId as string]}
         messages={messages[chatId as string]}
         userId={user.id}

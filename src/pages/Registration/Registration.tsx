@@ -23,7 +23,7 @@ export const Registration: FC = () => {
   useEffect(() => {
     if (registrationResult?.message) {
       if (registrationResult?.success) {
-        navigate('/login?auth=1')
+        navigate('/login?register=1')
         return
       }
       clearRegistrationFields()

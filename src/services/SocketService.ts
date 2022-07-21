@@ -63,13 +63,14 @@ class SocketService {
       const chats = store.getState().chats.chats
       rooms.forEach((room) => {
         if (objectHasOwnProperty(chats, room)) {
-          store.dispatch(ChatsActionCreators.setIsOnline(chats[room].member.id, true))
+          store.dispatch(ChatsActionCreators.setIsOnline(room, true))
         }
       })
     })
 
-    this.socket.on(SocketServerActions.UserConnectedToRoom, (userId) => {
-      store.dispatch(ChatsActionCreators.setIsOnline(userId, true))
+    this.socket.on(SocketServerActions.UserConnectedToRoom, ({userId, room}) => {
+      console.log('conn', userId)
+      store.dispatch(ChatsActionCreators.setIsOnline(room, true))
     })
 
     this.socket.on(SocketServerActions.NewMessage, (content) => {
@@ -82,7 +83,8 @@ class SocketService {
     })
 
     this.socket.on(SocketServerActions.UserDisconnected, ({ userId, room }) => {
-      store.dispatch(ChatsActionCreators.setIsOnline(userId, false))
+      console.log('disc', userId, room)
+      store.dispatch(ChatsActionCreators.setIsOnline(room, false))
       callEvents.emit('user_disconnected', room)
     })
 

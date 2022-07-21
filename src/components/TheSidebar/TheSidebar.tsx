@@ -17,10 +17,12 @@ export const TheSidebar: FC = () => {
   return (
     <aside className={`sidebar w-full h-full relative md:w-72 ${isCollapsed ? 'hidden' : 'block'}`}>
       <div className="sidebar__wrapper absolute top-5 bottom-5 left-5 border overflow-hidden border-white/20 rounded-xl w-[calc(100%_-_40px)]">
-        <div className="relative z-10">
+        <div className="relative z-10 h-full">
           <TheSidebarSearch />
-          <TheSidebarMembers />
-          <TheSidebarChats />
+          <div className="h-full overflow-y-auto pretty-scrollbar pb-8">
+            <TheSidebarMembers />
+            <TheSidebarChats />
+          </div>
         </div>
         <div className="sidebar__bg before:bg-black/20 before:absolute before:inset-0 before:z-0 before:blur-lg" />
       </div>

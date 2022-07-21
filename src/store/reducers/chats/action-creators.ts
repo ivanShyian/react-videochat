@@ -6,7 +6,7 @@ import {
   SetChatsAction,
   SetErrorAction,
   SetIsFetchedAction,
-  SetIsLoadingAction,
+  SetIsLoadingAction, SetIsOnline,
   UpdateChatLastMessageAction
 } from './types'
 import axiosClient from '@/api/axios'
@@ -23,7 +23,7 @@ export const ChatsActionCreators = {
   setIsLoading: (loading: boolean): SetIsLoadingAction => ({type: ChatsActionEnum.SET_IS_LOADING, payload: loading}),
   setIsFetched: (fetched: boolean): SetIsFetchedAction => ({type: ChatsActionEnum.SET_FETCHED, payload: fetched}),
   setChats: (chats: IChatsMap): SetChatsAction => ({type: ChatsActionEnum.SET_CHATS, payload: chats}),
-  setIsOnline: (userId: string, value: boolean) => ({type: ChatsActionEnum.SET_IS_ONLINE, payload: {userId, value}}),
+  setIsOnline: (room: string, value: boolean): SetIsOnline => ({type: ChatsActionEnum.SET_IS_ONLINE, payload: {room, value}}),
   appendChat: (chat: IChatsMap): AppendChatAction => ({type: ChatsActionEnum.APPEND_CHAT, payload: chat}),
   updateLastMessage: (message: IMessage): UpdateChatLastMessageAction => ({type: ChatsActionEnum.UPDATE_CHAT, payload: message}),
   addCallData: (roomId: string, callData: IChatCall): AddCallData => ({type: ChatsActionEnum.ADD_CALL_DATA, payload: {roomId, callData}}),

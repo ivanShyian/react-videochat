@@ -23,15 +23,17 @@ export const Login: FC = () => {
   }
 
   useEffect(() => {
-    if (withQueryParam) {
+    if (withQueryParam.get('register')) {
       toast.success('Registration success!', {
         icon: "🚀"
       });
+    } else if (withQueryParam.get('auth')) {
+      toast.info('Sign in please!')
     }
   }, [location])
 
   const withQueryParam = useMemo(() => {
-    return new URLSearchParams(location.search).get('auth')
+    return new URLSearchParams(location.search)
   }, [location])
 
   const clearFields = () => {

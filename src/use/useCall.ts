@@ -7,7 +7,8 @@ import {ChatsActionCreators} from '@/store/reducers/chats/action-creators'
 import {IChat} from '@/models/IChat'
 import EventEmitter from '@/utils/EventEmiiter'
 import {SocketService} from '@/use/useChat'
-import PeerService, {IAnswerPayload, ICallPayload} from '../services/PeerService'
+import PeerService, {ICallPayload} from '../services/PeerService'
+import {toast} from 'react-toastify'
 
 export interface ICallReturnStatement {
   videoRef: RefObject<HTMLVideoElement>;
@@ -52,10 +53,10 @@ export const useCall = (): ICallReturnStatement => {
 
   // Init
   useEffect(() => {
-    if (!peerExists) {
+    if (!peerExists && chats) {
       initPeer()
     }
-  }, [])
+  }, [chats])
 
   useEffect(() => {
     if (chats) {
@@ -132,6 +133,7 @@ export const useCall = (): ICallReturnStatement => {
       })
       return setCallView(true)
     }
+    toast.info('User currently offline 😴')
   }
 
   const connectWithUser = async(receiverId: string, roomId: string) => {

@@ -56,12 +56,12 @@ export const useChat = (type = UseChatType.Actions): ReturnStatement => {
   }, [chatsExists])
 
   useEffect(() => {
-    if (chatsExists && type === UseChatType.Actions && chatId) {
+    if (chatsExists && type === UseChatType.Actions && chatId && chats[chatId]) {
       setCurrentChat(chats[chatId])
       if (Object.keys(messages).length && messages[chatId] && messages[chatId].length) return
       getMessagesByChat(chatId)
     }
-  }, [chatsExists, chatId])
+  }, [chatsExists, chatId, chats])
 
   useEffect(() => {
     if (isChatsFetched && chatId && !chatsExists) navigate('/')

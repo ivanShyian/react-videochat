@@ -34,19 +34,12 @@ export default function chatsReducer(state = initialState, action: ChatsAction):
       }
     }
     case ChatsActionEnum.SET_IS_ONLINE: {
-      let onlineChatId
-      for (const [chatKey, chatValue] of Object.entries(state.chats)) {
-        if (chatValue.member.id === action.payload.userId) {
-          onlineChatId = chatKey
-        }
-      }
-      if (!onlineChatId) return state
       return {
         ...state,
         chats: {
           ...state.chats,
-          [onlineChatId]: {
-            ...state.chats[onlineChatId],
+          [action.payload.room]: {
+            ...state.chats[action.payload.room],
             isOnline: action.payload.value
           }
         }

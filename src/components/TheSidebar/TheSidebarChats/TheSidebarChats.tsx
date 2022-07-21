@@ -1,12 +1,17 @@
-import { FC } from 'react';
+import {FC, useMemo} from 'react'
 import { useTypedSelector } from '@/use/useTypedSelector'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as ISpinner } from '@/assets/icons/i-spinner.svg'
 import moment from 'moment'
+import sortChats from '@/utils/sortChats'
 
 export const TheSidebarChats: FC = () => {
   const { chats, isLoading } = useTypedSelector(selector => selector.chats)
   const navigate = useNavigate()
+
+  const sortedChats = useMemo(() => {
+    return sortChats(chats)
+  }, [chats])
 
   if (!Object.keys(chats).length && isLoading) {
     return (
@@ -20,7 +25,7 @@ export const TheSidebarChats: FC = () => {
   return (
     <section className="sidebar__chats relative z-10">
       <ul className="sidebar__chats_list">
-        {Object.keys(chats).map((chatKey, id) => {
+        {Object.keys(sortedChats).map((chatKey, id) => {
           const chat = chats[chatKey]
           return (
             <li

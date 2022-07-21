@@ -55,7 +55,7 @@ export interface SetIsLoadingAction {
 export interface SetIsOnline {
   type: ChatsActionEnum.SET_IS_ONLINE
   payload: {
-    userId: string
+    room: string
     value: boolean
   }
 }

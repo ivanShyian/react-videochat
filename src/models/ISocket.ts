@@ -23,7 +23,7 @@ export enum SocketClientActions {
 export interface ServerToClientEvents {
   [SocketServerActions.Connect]: () => void
   [SocketServerActions.OnlineRoomList]: (rooms: string[] | []) => void
-  [SocketServerActions.UserConnectedToRoom]: (userId: string) => void
+  [SocketServerActions.UserConnectedToRoom]: (data: {userId: string, room: string}) => void
   [SocketServerActions.UserDisconnected]: (data: {userId: string, room: string}) => void
   [SocketServerActions.NewMessage]: (content: IMessage) => void
   [SocketServerActions.JoinToRoom]: (data: {room: string}) => void

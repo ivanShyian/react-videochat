@@ -8,7 +8,7 @@
 }
 
 html {
-  @apply h-full md:h-screen;
+  @apply h-full md:h-screen bg-slate-800;
 }
 
 body, #root, .App, .layout-default {
@@ -40,6 +40,14 @@ body, #root, .App, .layout-default {
 /* Handle on hover */
 .pretty-scrollbar::-webkit-scrollbar-thumb:hover {
   @apply bg-[#5c1434];
+}
+
+.pretty-scrollbar-dark::-webkit-scrollbar-thumb {
+  @apply bg-[#0f172a] rounded-2xl;
+}
+
+.pretty-scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#0f172a] rounded-2xl;
 }
 
 .blurred-bg {

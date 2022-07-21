@@ -11,7 +11,7 @@ export const LayoutProtected: FC = () => {
   const {isAuth} = useTypedSelector(selector => selector.auth)
   useChat(UseChatType.Init)
 
-  if (!isAuth) return <Navigate to="/login" />
+  if (!isAuth) return <Navigate to="/login?auth=1" />
   
   return (
     <PeerContextProvider>
