@@ -31,6 +31,7 @@ type TCallPayload = ICallPayload & {
 export let callEvents: EventEmitter
 export let peerEvents: EventEmitter
 let peerService: PeerService
+let tempStream: MediaStream | null
 
 export const useCall = (): ICallReturnStatement => {
   const params = useParams()
@@ -94,8 +95,12 @@ export const useCall = (): ICallReturnStatement => {
       if (chats[roomId]?.callData) endCall()
     })
     callEvents.on('declined_call', (room) => {
+      if (tempStream) {
+        removeTracks(tempStream)
+        tempStream = null
+      }
       endCall(room)
-      // @TODO Notify that user declined call
+      toast.info('User busy!')
     })
   }
 
@@ -144,6 +149,7 @@ export const useCall = (): ICallReturnStatement => {
       }
       const stream = await createStream()
       if (stream && currentChat?.callData) {
+        tempStream = stream
         peerService.call({
           myVideoStream: stream,
           callData: currentChat.callData,
@@ -206,19 +212,20 @@ export const useCall = (): ICallReturnStatement => {
 
   const endCall = useCallback((roomId?: string) => {
     const room = currentChat?.id || params?.chatId || roomId || undefined
-    if (room && chats[room]) {
-      peerService.callRunning = false
-      videoRefMember.current?.remove()
-      videoRef.current?.remove()
-      removeTracks(chats[room])
+    const chat = !!room && chats[room]
+    if (chat) {
+      if (videoRef.current && videoRefMember.current) {
+        videoRefMember.current.remove()
+        videoRef.current.remove()
+      }
+      if (chat?.callData?.myVideoStream) removeTracks(chat.callData.myVideoStream)
       setCallView(false)
       removeCallData(room)
     }
   }, [currentChat])
 
-  const removeTracks = (chat: IChat) => {
-    chat.callData?.myVideoStream?.getTracks().forEach((track) => {
-      console.log(track)
+  const removeTracks = (stream: MediaStream) => {
+    stream.getTracks().forEach((track) => {
       track.stop()
     })
   }
