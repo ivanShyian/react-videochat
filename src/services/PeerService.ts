@@ -27,13 +27,17 @@ const initializePeer = (userId: string) => {
 
 class PeerService {
   peer: Peer
+  isCallRunning: boolean
+
   constructor(userId: string) {
     this.peer = initializePeer(userId)
+    this.isCallRunning = false
     this.subscribePeerEvents()
   }
 
   subscribePeerEvents() {
     this.peer.on('call', async(call) => {
+      this.callRunning = true
       peerEvents.emit('onCallReceive', {
         callerId: call.peer,
         roomId: call.metadata.roomId,
@@ -42,7 +46,10 @@ class PeerService {
       })
 
       call.on('close', () => {
-        peerEvents.emit('onCallClose', call.metadata.roomId)
+        if (this.callRunning) {
+          peerEvents.emit('onCallClose', call.metadata.roomId)
+          this.callRunning = false
+        }
       })
     })
 
@@ -57,10 +64,14 @@ class PeerService {
     if (call) {
       call.on('stream', async(userVideoStream: MediaStream) => {
         peerEvents.emit('peerStream', {...payload, userVideoStream, call})
+        this.callRunning = true
       })
 
       call.on('close', () => {
-        peerEvents.emit('onCallClose', call.metadata.roomId)
+        if (this.callRunning) {
+          peerEvents.emit('onCallClose', call.metadata.roomId)
+          this.callRunning = false
+        }
       })
     }
   }
@@ -73,8 +84,21 @@ class PeerService {
     })
   }
 
-  getPeerInstance() {
+
+  set peerInstance(peer: Peer) {
+    this.peer = peer
+  }
+
+  get peerInstance() {
     return this.peer
+  }
+
+  set callRunning(val: boolean) {
+    this.isCallRunning = val
+  }
+
+  get callRunning(): boolean {
+    return this.isCallRunning
   }
 }
 

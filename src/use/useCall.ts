@@ -122,7 +122,7 @@ export const useCall = (): ICallReturnStatement => {
 
   const initPeer = () => {
     peerService = new PeerService(user.id)
-    setPeerExists(!!peerService.getPeerInstance)
+    setPeerExists(!!peerService.peerInstance)
   }
 
   const onCallUser = async(roomId: string, receiverId: string) => {
@@ -207,6 +207,7 @@ export const useCall = (): ICallReturnStatement => {
   const endCall = useCallback((roomId?: string) => {
     const room = currentChat?.id || params?.chatId || roomId || undefined
     if (room && chats[room]) {
+      peerService.isCallRunning = false
       videoRefMember.current?.remove()
       videoRef.current?.remove()
       removeTracks(chats[room])
