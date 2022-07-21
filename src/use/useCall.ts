@@ -207,7 +207,7 @@ export const useCall = (): ICallReturnStatement => {
   const endCall = useCallback((roomId?: string) => {
     const room = currentChat?.id || params?.chatId || roomId || undefined
     if (room && chats[room]) {
-      peerService.isCallRunning = false
+      peerService.callRunning = false
       videoRefMember.current?.remove()
       videoRef.current?.remove()
       removeTracks(chats[room])
