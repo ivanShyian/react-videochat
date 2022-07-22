@@ -18,7 +18,7 @@ export const ChatsChatHeader: FC<Props> = ({nickname, onCall}) => {
         <div className="chat__header_content z-10 relative h-full flex items-center justify-between">
           <SButton
             theme="transparent"
-            className="border-0 !p-0 !p-2 rounded-lg opacity-70 hover:opacity-100 hover:bg-white/10 md:hidden"
+            className="!border-0 !p-0 !p-2 rounded-lg opacity-70 hover:opacity-100 hover:bg-white/10 md:hidden"
             onClick={() => navigate('/chats')}
           >
             <IEquals className="fill-current text-white" />
