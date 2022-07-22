@@ -5,7 +5,7 @@ import { ReactComponent as IEquals } from '@/assets/icons/i-equals.svg'
 import {useNavigate} from 'react-router-dom'
 
 interface Props {
-  nickname: string
+  nickname: string | undefined
   onCall: () => any
 }
 

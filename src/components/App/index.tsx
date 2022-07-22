@@ -11,7 +11,6 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import {ThePageNotFound} from '@/components/ThePageNotFound/ThePageNotFound'
 
 function App() {
-
   return (
     <div className="App relative">
       <Routes>

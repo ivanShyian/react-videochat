@@ -1,10 +1,11 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
 import {useTypedSelector} from '@/use/useTypedSelector'
 import {useChat, UseChatType} from '@/use/useChat'
 import ChatsChatCall from '@/components/ChatsChat/ChatsChatCall'
 import {usePeerContext} from '../../context/PeerContext'
 import ChatsChatMessages from '@/components/ChatsChat/ChatsChatMessages'
+import SLoader from '@/components/shared/SLoader'
 
 export const ChatsChat: FC = () => {
   const {chatId} = useParams()
@@ -12,10 +13,11 @@ export const ChatsChat: FC = () => {
   const {chats} = useTypedSelector(selector => selector.chats)
   const {user} = useTypedSelector(selector => selector.auth)
   const {currentChat, sendMessage} = useChat(UseChatType.Actions)
+  const [loading, setLoading] = useState(true)
+
   const {
     onCallUser,
     closeCall,
-    declineCall,
     videoRefMember,
     videoRef,
     isCallView,
@@ -29,6 +31,16 @@ export const ChatsChat: FC = () => {
       onCallUser(currentChat.id, currentChat.member.id)
     }
   }
+
+  useEffect(() => {
+    if (loading) {
+      setLoading(false)
+    }
+  }, [currentCall, currentChat, loading])
+  //
+  // if (loading) {
+  //   return <SLoader />
+  // }
 
   if (!isCallView) {
     return (

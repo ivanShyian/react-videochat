@@ -5,7 +5,7 @@ import React, {FC} from 'react'
 import ChatsChatHeader from '@/components/ChatsChat/ChatsChatHeader'
 import ChatsChatBox from '@/components/ChatsChat/ChatsChatBox'
 import ChatsChatFooter from '@/components/ChatsChat/ChatsChatFooter'
-import {ReactComponent as ISpinner} from '@/assets/icons/i-spinner.svg'
+import SLoader from '@/components/shared/SLoader'
 
 interface IChatChatBox {
   handleCall: () => void
@@ -17,14 +17,6 @@ interface IChatChatBox {
 }
 
 export const ChatsChatMessages: FC<IChatChatBox> = ({handleCall, member, messages, chat, userId, sendMessage}) => {
-  if (!member) {
-    return (
-      <p className="flex justify-center flex-1 items-center text-center text-xl relative">
-        <ISpinner className="animate-spin h-5 text-white/20 fill-red-400 mr-2" />
-        <span className="text-white/20">Loading...</span>
-      </p>
-    )
-  }
   return (
     <div className="chat w-full h-full">
       <div className="chat__wrapper relative md:rounded-xl overflow-hidden md:border border-white/20 h-full md:h-[calc(100%_-_40px)] w-full md:w-[calc(100%_-_20px)] m-0 md:m-5 md:ml-0">

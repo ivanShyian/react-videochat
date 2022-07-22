@@ -16,7 +16,7 @@ export const ChatFooter: FC<{sendMessage: (message: string) => void}> = ({ sendM
 
   return (
     <div className="chat__footer flex items-center relative border-t border-white/20 px-2">
-      <ChatFooterEmoji />
+      {/*<ChatFooterEmoji />*/}
       <ChatFooterTextField
         message={message}
         onChange={changeMessage}
@@ -29,7 +29,7 @@ export const ChatFooter: FC<{sendMessage: (message: string) => void}> = ({ sendM
       {/* <div>
         <IClip />
       </div> */}
-      <ChatsChatFooterVoice />
+      {/*<ChatsChatFooterVoice />*/}
     </div>
   )
 }
