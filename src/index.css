@@ -8,11 +8,15 @@
 }
 
 html {
-  @apply h-full md:h-screen bg-slate-800;
+  @apply h-full md:h-screen bg-slate-900;
 }
 
-body, #root, .App, .layout-default {
-  @apply h-full;
+body, #root, .App, .layout-default, .layout-login {
+  @apply h-full bg-transparent;
+}
+
+body {
+  @apply bg-slate-to-pink;
 }
 
 .card {
@@ -59,4 +63,9 @@ body, #root, .App, .layout-default {
 
 .bg-slate-to-pink {
   @apply bg-gradient-to-r from-slate-900 to-pink-800;
+}
+
+.chat__message:empty::before {
+  content: attr(placeholder);
+  @apply text-white/60 pointer-events-none block;
 }

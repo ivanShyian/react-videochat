@@ -24,7 +24,7 @@ export const ChatsChatBox: FC<Props> = ({ messages, chat, userId }) => {
 
   return (
     <div className="h-[calc(100%_-_57px)]">
-      <div className="chat__box flex flex-col pretty-scrollbar overflow-y-scroll h-full px-4 pb-2 pt-12"
+      <div className="chat__box flex flex-col pretty-scrollbar overflow-y-scroll overflow-x-hidden h-full px-4 pb-2 pt-12"
       >
         {messages.map((message, key) => (
           <ChatsChatBoxMessage

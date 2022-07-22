@@ -41,7 +41,7 @@ export const SButton: FC<Props> = ({onClick, children, className, to, isDisabled
       disabled={isDisabled}
       className={`s-button px-10 rounded-full font-bold h-10 transition duration-300 flex items-center justify-center ${buttonStyles}`}
     >
-      <ISpinner className={`animate-spin h-4 text-white/20 fill-white/80 w-0 transition-all ease-in-out ${isLoading ? 'w-4 mr-2' : ''}`} />
+      <ISpinner className={`animate-spin h-4 text-white/20 fill-white/80 w-0 transition-all ease-in-out ${isLoading ? 'w-4 mr-2 block' : 'hidden'}`} />
       {children}
     </button>
   )

@@ -27,10 +27,12 @@ export const TheSidebarChats: FC = () => {
       <ul className="sidebar__chats_list">
         {Object.keys(sortedChats).map((chatKey, id) => {
           const chat = chats[chatKey]
+          // const messageArr = chat.lastMessage?.content.match(/(^<div>(.*?)<\/div>)|((?:(?!(<div>)|(<br>)).)*)|(.*)/)
+          // const message = !!messageArr && messageArr[0]
           return (
             <li
               key={id}
-              className="sidebar__chats_item px-4 border-b pb-2 border-white/20 cursor-pointer hover:bg-white/5"
+              className="sidebar__chats_item px-4 border-b pb-2 border-white/20 cursor-pointer hover:bg-white/5 max-h-[53px]"
               onClick={() => navigate(`/chats/${chat.id}`)}
             >
               <p className="text-lg text-blue-200 flex justify-between items-center">

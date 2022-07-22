@@ -27,7 +27,7 @@ export const ChatsChatMessages: FC<IChatChatBox> = ({handleCall, member, message
   }
   return (
     <div className="chat w-full h-full">
-      <div className="chat__wrapper relative rounded-xl overflow-hidden border border-white/20 h-[calc(100%_-_40px)] w-[calc(100%_-_40px)] md:w-[calc(100%_-_20px)] m-5 ml-5 md:ml-0">
+      <div className="chat__wrapper relative md:rounded-xl overflow-hidden md:border border-white/20 h-full md:h-[calc(100%_-_40px)] w-full md:w-[calc(100%_-_20px)] m-0 md:m-5 md:ml-0">
         <div className="chat__content relative z-10 flex flex-col justify-between h-full">
           <ChatsChatHeader
             onCall={handleCall}

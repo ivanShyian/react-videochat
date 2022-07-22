@@ -16,7 +16,7 @@ export const LayoutProtected: FC = () => {
   return (
     <PeerContextProvider>
       <div className="layout-default">
-      <main className="main flex h-full bg-gradient-to-r from-slate-900 to-pink-800">
+      <main className="main flex h-full">
         <TheSidebar />
         <section className="flex flex-1 h-full">
           <Outlet />

@@ -13,29 +13,36 @@ interface IChatChatCall {
 
 export const ChatsChatCall: FC<IChatChatCall> = ({videoRefMember, videoRef, closeCall, toggleVideo, toggleAudio, callData}) => {
   return (
-    <div className="chats-call mr-5 ml-5 md:ml-0 my-5 w-[calc(100%_-_70px)] md:w-[calc(100%_-_35px)] h-[calc(100%_-_35px)] flex flex-col">
-      <div className="chat-call__wrapper h-[calc(100%_-_80px)] flex flex-col xl:flex-row">
-        <div className="chat-call__video mb-5 flex-1 h-[calc(50%_-_10px)] block xl:block xl:h-full xl:my-auto xl:mr-5">
-          <video
-            className="rounded-xl overflow-hidden mx-auto w-auto h-full xl:w-auto xl:h-full"
-            playsInline={true}
-            ref={videoRefMember}
-          />
+    <div className="chats-call w-full flex flex-col">
+      <div className="chat-call__wrapper flex flex-col px-5 py-6 blurred-bg md:mr-5 md:my-5 h-full md:border border-white/20 rounded-xl">
+        <div className="flex flex-col md:flex-row w-full h-[calc(100%_-_120px)] md:h-auto">
+          <div className="chat-call__video flex-1 md:mr-5 mb-5 h-1/2 md:h-auto">
+            <p className="text-white text-center text-blue-200 mb-5">User-1</p>
+            <video
+              className="w-auto md:w-full h-full md:h-auto mx-auto md:mx-0"
+              playsInline={true}
+              ref={videoRefMember}
+            />
+          </div>
+          <div className="chat-call__video flex-1 h-1/2 md:h-auto">
+            <p className="text-white text-center text-blue-200 mb-5 hidden md:block">Me</p>
+            <video
+              className="w-auto md:w-full h-full md:h-auto"
+              playsInline={true}
+              ref={videoRef}
+            />
+            <p className="text-white text-center text-blue-200 mt-5 block md:hidden">Me</p>
+          </div>
         </div>
-        <div className="chat-call__video flex-1 h-[calc(50%_-_10px)] block xl:block xl:h-full xl:my-auto">
-          <video
-            className="rounded-xl overflow-hidden mx-auto w-auto h-full xl:w-auto xl:h-full"
-            playsInline={true}
-            ref={videoRef}
+        <div className="mt-auto">
+          <ChatsChatCallControls
+            onCallClose={closeCall}
+            onToggleVideo={toggleVideo}
+            onToggleAudio={toggleAudio}
+            callData={callData}
           />
         </div>
       </div>
-      <ChatsChatCallControls
-        onCallClose={closeCall}
-        onToggleVideo={toggleVideo}
-        onToggleAudio={toggleAudio}
-        callData={callData}
-      />
     </div>
   )
 }

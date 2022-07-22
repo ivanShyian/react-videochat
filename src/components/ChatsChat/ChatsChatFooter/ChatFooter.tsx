@@ -9,12 +9,13 @@ export const ChatFooter: FC<{sendMessage: (message: string) => void}> = ({ sendM
   const [message, changeMessage] = useState('')
 
   const sendMessageToUser = (textMessage: string): void => {
+    // textMessage.replace(/^(<br>)+|^(<div><br><\/div>)+|(<div><br><\/div>)+$/gm, '')
     sendMessage(textMessage)
     changeMessage('')
   }
 
   return (
-    <div className="chat__footer flex items-center relative border-t border-white/20">
+    <div className="chat__footer flex items-center relative border-t border-white/20 px-2">
       <ChatFooterEmoji />
       <ChatFooterTextField
         message={message}

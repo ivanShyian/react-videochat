@@ -16,7 +16,7 @@ export const TheSidebar: FC = () => {
 
   return (
     <aside className={`sidebar w-full h-full relative md:w-72 ${isCollapsed ? 'hidden' : 'block'}`}>
-      <div className="sidebar__wrapper absolute top-5 bottom-5 left-5 border overflow-hidden border-white/20 rounded-xl w-[calc(100%_-_40px)]">
+      <div className="sidebar__wrapper absolute inset-0 md:top-5 md:bottom-5 md:left-5 md:border overflow-hidden border-white/20 md:rounded-xl w-full md:w-[calc(100%_-_40px)]">
         <div className="relative z-10 h-full">
           <TheSidebarSearch />
           <div className="h-full overflow-y-auto pretty-scrollbar pb-8">
@@ -24,7 +24,7 @@ export const TheSidebar: FC = () => {
             <TheSidebarChats />
           </div>
         </div>
-        <div className="sidebar__bg before:bg-black/20 before:absolute before:inset-0 before:z-0 before:blur-lg" />
+        <div className="sidebar__bg blurred-bg before:z-0 !static" />
       </div>
     </aside>
   )

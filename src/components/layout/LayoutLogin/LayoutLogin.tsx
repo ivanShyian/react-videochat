@@ -12,7 +12,7 @@ export const LayoutLogin = () => {
 
 
   return (
-    <main className="main bg-slate-to-pink h-screen flex justify-center items-center layout-login login">
+    <main className="main h-screen flex justify-center items-center layout-login login">
       <div className="card card__login flex relative md:h-[476px] md:w-[750px]">
         <div className="hidden md:block card__image bg-background-login bg-no-repeat bg-contain h-72 w-72 mr-auto" />
         <Outlet />

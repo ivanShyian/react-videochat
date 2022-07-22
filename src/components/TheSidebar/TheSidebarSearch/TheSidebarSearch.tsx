@@ -9,10 +9,10 @@ export const TheSidebarSearch: FC = () => {
   const {getUsers} = useActions(UsersActionCreators.getUsers)
 
   return (
-    <div className="sidebar-searc relative z-10">
+    <div className="sidebar-search relative z-10">
       <SInput
         id="search-field"
-        className="rounded-none h-10"
+        className="rounded-none h-10 min-h-[2.5rem]"
         inputClassName="!bg-black/20 placeholder:text-white/50 caret-white/50 text-white"
         value={query}
         placeholder="Find user by email, nickname, etc..."
