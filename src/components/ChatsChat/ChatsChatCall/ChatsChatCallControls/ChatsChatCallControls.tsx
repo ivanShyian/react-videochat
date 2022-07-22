@@ -36,7 +36,7 @@ export const ChatsChatCallControls: FC<ICallControls> = ({onCallClose, onToggleA
   const IAudioIcon = audioMuted ? IVoice : IVoiceCross
 
   return (
-    <div className="h-[60px] mt-5 flex items-center justify-center">
+    <div className="h-[60px] flex items-center justify-center md:flex-1 md:-mb-5">
       <div>
         <SButton
           theme="transparent"
