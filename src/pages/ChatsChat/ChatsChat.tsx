@@ -23,6 +23,7 @@ export const ChatsChat: FC = () => {
     isCallView,
     toggleVideoStream,
     toggleAudioStream,
+    isCallEstablished,
     currentChat: currentCall
   } = usePeerContext()
 
@@ -61,6 +62,7 @@ export const ChatsChat: FC = () => {
       closeCall={closeCall}
       toggleAudio={toggleAudioStream}
       toggleVideo={toggleVideoStream}
+      isCallEstablished={isCallEstablished}
       callData={currentCall?.callData}
     />
   )

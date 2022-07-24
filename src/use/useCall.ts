@@ -21,6 +21,7 @@ export interface ICallReturnStatement {
   declineCall: (roomId: string) => void
   toggleAudioStream: () => void
   toggleVideoStream: () => void
+  isCallEstablished: boolean
 }
 
 type TCallPayload = ICallPayload & {
@@ -36,13 +37,17 @@ let tempStream: MediaStream | null
 export const useCall = (): ICallReturnStatement => {
   const params = useParams()
   const navigate = useNavigate()
+
   const {user} = useTypedSelector(selector => selector.auth)
   const {chats} = useTypedSelector(selector => selector.chats)
   const {addCallData, removeCallData} = useActions(ChatsActionCreators.addCallData, ChatsActionCreators.removeCallData)
+
   const [peerExists, setPeerExists] = useState<boolean>(false)
+  const [isCallView, setCallView] = useState<boolean>(false)
+  const [isCallEstablished, setCallEstablished] = useState<boolean>(false)
+
   const videoRef = useRef<HTMLVideoElement>(null)
   const videoRefMember = useRef<HTMLVideoElement>(null)
-  const [isCallView, setCallView] = useState<boolean>(false)
 
   const currentChat = useMemo(() => {
     if (params && params.chatId && chats[params.chatId]) {
@@ -84,7 +89,13 @@ export const useCall = (): ICallReturnStatement => {
 
   // Chat change handling
   useEffect(() => {
-    setCallView(!!(params.chatId && currentChat?.callData))
+    if (!!(params.chatId && currentChat?.callData)) {
+      setCallView(true)
+      setCallEstablished(true)
+      return
+    }
+    setCallView(false)
+    setCallEstablished(false)
   }, [params])
 
   const initSocketEmitter = () => {
@@ -120,6 +131,7 @@ export const useCall = (): ICallReturnStatement => {
         ...callData,
         ...streamPayload
       })
+      setCallEstablished(true)
     })
 
     peerEvents.on('onCallClose', endCall)
@@ -260,6 +272,7 @@ export const useCall = (): ICallReturnStatement => {
     currentChat,
     closeCall,
     toggleAudioStream,
-    toggleVideoStream
+    toggleVideoStream,
+    isCallEstablished
   }
 }

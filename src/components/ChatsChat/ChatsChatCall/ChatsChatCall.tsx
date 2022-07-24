@@ -2,6 +2,7 @@ import React, {FC, LegacyRef} from 'react'
 import ChatsChatCallControls from '@/components/ChatsChat/ChatsChatCall/ChatsChatCallControls'
 import {IChatCall} from '@/models/IChat'
 import SVideo from '@/components/shared/SVideo'
+import SLoader from '@/components/shared/SLoader'
 
 interface IChatChatCall {
   videoRefMember: LegacyRef<HTMLVideoElement>
@@ -10,12 +11,16 @@ interface IChatChatCall {
   toggleVideo: () => void
   toggleAudio: () => void
   callData: IChatCall | undefined
+  isCallEstablished: boolean
 }
 
-export const ChatsChatCall: FC<IChatChatCall> = ({videoRefMember, videoRef, closeCall, toggleVideo, toggleAudio, callData}) => {
+export const ChatsChatCall: FC<IChatChatCall> = ({videoRefMember, videoRef, closeCall, toggleVideo, toggleAudio, callData, isCallEstablished}) => {
   return (
     <div className="chats-call w-full flex flex-col">
-      <div className="chat-call__wrapper flex flex-col justify-evenly md:justify-start md:px-5 md:py-6 blurred-bg md:mr-5 md:my-5 h-full md:border border-white/20 md:rounded-xl">
+      {!isCallEstablished && (
+        <SLoader className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      )}
+      <div className={`chat-call__wrapper flex flex-col justify-evenly md:justify-start md:px-5 md:py-6 blurred-bg md:mr-5 md:my-5 h-full md:border border-white/20 md:rounded-xl ${isCallEstablished ? 'opacity-100' : 'opacity-0'}`}>
         <div className="mt-2 md:mb-4">
           <p className="text-white/70 text-xl text-center mb-1">USER THAT I TALKING WITH</p>
           <p className="text-white/40 text-center">00:00</p>
