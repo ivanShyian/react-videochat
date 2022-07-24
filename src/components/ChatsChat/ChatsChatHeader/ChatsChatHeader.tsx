@@ -13,7 +13,7 @@ export const ChatsChatHeader: FC<Props> = ({nickname, onCall}) => {
   const navigate = useNavigate()
 
   return (
-    <div className="chat__header h-10 min-h-[2.5rem] flex justify-center absolute left-0 right-0">
+    <div className="chat__header h-10 min-h-[2.5rem] flex justify-center absolute top-0 left-0 right-0">
       <div className="chat__header_wrapper border-b relative z-10 border-white/20 w-full md:rounded-t-xl px-4 overflow-hidden backdrop-blur-xl h-full before:bg-black/0 before:absolute before:inset-0 before:z-0 before:blur-xl">
         <div className="chat__header_content z-10 relative h-full flex items-center justify-between">
           <SButton

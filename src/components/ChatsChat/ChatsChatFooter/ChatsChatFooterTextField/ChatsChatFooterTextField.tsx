@@ -1,6 +1,12 @@
-import SInput from '@/components/shared/SInput';
 import keyDownHandler from '@/utils/keyDownHandler';
-import React, { FC, Dispatch, SetStateAction, KeyboardEvent, useState, useRef, Component, RefObject, MutableRefObject } from 'react';
+import React, {
+  FC,
+  Dispatch,
+  SetStateAction,
+  KeyboardEvent,
+  useRef,
+  FormEvent, useEffect, useMemo
+} from 'react'
 
 interface Props {
   message: string
@@ -9,31 +15,37 @@ interface Props {
 }
 
 export const ChatsChatFooterTextField: FC<Props> = ({ message, onChange, sendMessage }) => {
-  const [collapsed, changeCollapse] = useState(true)
-  
+  const contentEditable = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (message.length === 0 && contentEditable.current) {
+      contentEditable.current.innerHTML = message
+    }
+  }, [message])
+
   const handleKeyDown = (e: KeyboardEvent) => {
-    // const target = e.target as HTMLTextAreaElement
-    // target.style.height = target.scrollHeight + 'px'
     const key = keyDownHandler(e)
+    const divTarget = e.target as HTMLDivElement
     const isEnter = key == 13 || key === 'Enter'
     if (isEnter && !e.shiftKey) {
       e.preventDefault()
-      sendMessage(message)
-    } else if (isEnter) {
+      sendMessage(divTarget.innerHTML)
     }
   }
 
+  const onInput = (event: FormEvent<HTMLDivElement>) => {
+    const divTarget = event.target as HTMLDivElement
+    onChange(divTarget.innerHTML)
+  }
  
   return (
-    <div className="chat__input h-14 flex-1">
-      <SInput
-        id="chat__message"
-        className="!h-full pt-4 pb-4"
-        type="textarea"
-        inputClassName="!bg-transparent text-white overflow-hidden h-full max-h-64 transition ease-in-out"
-        placeholder="Write message here..."
-        value={message}
-        onChange={onChange}
+    <div className="chat__input w-full max-h-[196px] flex items-center">
+      <div
+        ref={contentEditable}
+        className="chat__message text-white min-h-[24px] h-full max-h-[176px] py-1 px-2 my-2 w-full break-all overflow-y-auto pretty-scrollbar-dark focus:outline rounded-md outline-white/20"
+        placeholder="Write your message here..."
+        contentEditable
+        onInput={onInput}
         onKeyDown={handleKeyDown}
       />
     </div>

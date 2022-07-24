@@ -1,11 +1,10 @@
 import {IUser} from '@/models/IUser'
 import {IChat} from '@/models/IChat'
 import {IMessage} from '@/models/IMessage'
-import React, {FC} from 'react'
+import React, {FC, useEffect, useRef, useState} from 'react'
 import ChatsChatHeader from '@/components/ChatsChat/ChatsChatHeader'
 import ChatsChatBox from '@/components/ChatsChat/ChatsChatBox'
 import ChatsChatFooter from '@/components/ChatsChat/ChatsChatFooter'
-import SLoader from '@/components/shared/SLoader'
 
 interface IChatChatBox {
   handleCall: () => void
@@ -17,6 +16,7 @@ interface IChatChatBox {
 }
 
 export const ChatsChatMessages: FC<IChatChatBox> = ({handleCall, member, messages, chat, userId, sendMessage}) => {
+
   return (
     <div className="chat w-full h-full">
       <div className="chat__wrapper relative md:rounded-xl overflow-hidden md:border border-white/20 h-full md:h-[calc(100%_-_40px)] w-full md:w-[calc(100%_-_20px)] m-0 md:m-5 md:ml-0">
@@ -30,10 +30,11 @@ export const ChatsChatMessages: FC<IChatChatBox> = ({handleCall, member, message
             chat={chat}
             userId={userId}
           />
-          <ChatsChatFooter sendMessage={sendMessage}/>
+          <ChatsChatFooter
+            sendMessage={sendMessage}
+          />
         </div>
-        <div
-          className="chat__bg absolute inset-0 before:bg-black/20 before:absolute before:inset-0 before:z-0 before:blur-lg"/>
+        <div className="chat__bg absolute inset-0 before:bg-black/20 before:absolute before:inset-0 before:z-0 before:blur-lg"/>
       </div>
     </div>
   )

@@ -27,8 +27,8 @@ export const TheSidebarChats: FC = () => {
       <ul className="sidebar__chats_list">
         {Object.keys(sortedChats).map((chatKey, id) => {
           const chat = chats[chatKey]
-          // const messageArr = chat.lastMessage?.content.match(/(^<div>(.*?)<\/div>)|((?:(?!(<div>)|(<br>)).)*)|(.*)/)
-          // const message = !!messageArr && messageArr[0]
+          const messageArr = chat.lastMessage?.content.match(/(^<div>(.*?)<\/div>)|((?:(?!(<div>)|(<br>)).)*)|(.*)/)
+          const message = !!messageArr && messageArr[0]
           return (
             <li
               key={id}
@@ -39,18 +39,18 @@ export const TheSidebarChats: FC = () => {
                 <span>{chat.member.nickname}</span>
                 {chat.isOnline && <span className="text-xs text-blue-200/70">online</span>}
               </p>
-              <p className="flex justify-between items-end text-sm -mt-1 whitespace-nowrap overflow-hidden text-ellipsis text-white/60">
+              <div className="flex justify-between items-end text-sm -mt-1 whitespace-nowrap overflow-hidden text-ellipsis text-white/60">
                 {
                   chat.lastMessage
                     ? (
                       <>
-                        <span className="overflow-hidden text-ellipsis">{chat.lastMessage?.content}</span>
+                        <div className="overflow-hidden text-ellipsis inline" dangerouslySetInnerHTML={{__html: message as string}} />
                         <span className="text-xs">{moment(chat.lastMessage?.updatedAt).format('HH:mm')}</span>
                       </>
                     )
                     : <span className="text-white/20">No messages yet</span>
                 }
-              </p>
+              </div>
             </li>
           )
         })}

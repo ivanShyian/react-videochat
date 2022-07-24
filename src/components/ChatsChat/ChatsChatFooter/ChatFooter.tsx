@@ -1,21 +1,26 @@
-import React, { FC, useState } from 'react';
+import React, {FC, LegacyRef, MutableRefObject, RefObject, useEffect, useRef, useState} from 'react'
 import ChatFooterTextField from './ChatsChatFooterTextField';
-import ChatFooterEmoji from './ChatsChatFooterEmoji';
 import ChatFooterSend from './ChatsChatFooterSend';
-import { ChatsChatFooterVoice } from './ChatsChatFooterVoice/ChatsChatFooterVoice';
-import { ReactComponent as IClip } from '@/assets/icons/i-clip.svg'
 
-export const ChatFooter: FC<{sendMessage: (message: string) => void}> = ({ sendMessage }) => {
+interface Props {
+  sendMessage: (message: string) => void,
+}
+
+export const ChatFooter: FC<Props> = ({ sendMessage,  }) => {
   const [message, changeMessage] = useState('')
 
   const sendMessageToUser = (textMessage: string): void => {
-    // textMessage.replace(/^(<br>)+|^(<div><br><\/div>)+|(<div><br><\/div>)+$/gm, '')
-    sendMessage(textMessage)
+    const newMessage = textMessage.replace(/^(<br>)+|^(<div><br><\/div>)+|(<div><br><\/div>)+$/gm, '')
+    if (newMessage.length) {
+      sendMessage(textMessage.replace(/^(<br>)+|^(<div><br><\/div>)+|(<div><br><\/div>)+$/gm, ''))
+    }
     changeMessage('')
   }
 
   return (
-    <div className="chat__footer flex items-center relative border-t border-white/20 px-2">
+    <div
+      className="chat__footer mt-auto overflow-hidden flex items-center relative border-t border-white/20 px-2"
+    >
       {/*<ChatFooterEmoji />*/}
       <ChatFooterTextField
         message={message}
@@ -23,7 +28,6 @@ export const ChatFooter: FC<{sendMessage: (message: string) => void}> = ({ sendM
         sendMessage={() => sendMessageToUser(message)}
       />
       <ChatFooterSend
-        message={message}
         sendMessage={() => sendMessageToUser(message)}
       />
       {/* <div>
