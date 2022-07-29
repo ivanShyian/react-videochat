@@ -71,7 +71,6 @@ export const AuthActionCreators = {
     }
   },
   logout: () => (dispatch: AppDispatch, getState: RootState, {cookies}: ThunkArgs) => {
-    console.log('got')
     dispatch(AuthActionCreators.setIsLoading(true))
     cookies.remove('userData')
     dispatch(AuthActionCreators.setIsAuth(false))

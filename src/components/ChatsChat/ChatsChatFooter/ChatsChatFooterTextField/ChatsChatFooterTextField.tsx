@@ -42,7 +42,7 @@ export const ChatsChatFooterTextField: FC<Props> = ({ message, onChange, sendMes
     <div className="chat__input w-full max-h-[196px] flex items-center">
       <div
         ref={contentEditable}
-        className="chat__message text-white min-h-[24px] h-full max-h-[176px] py-1 px-2 my-2 w-full break-all overflow-y-auto pretty-scrollbar-dark focus:outline rounded-md outline-white/20"
+        className="chat__message text-white min-h-[24px] h-full max-h-[176px] py-1 px-2 my-2 w-full break-all overflow-y-auto pretty-scrollbar-white focus:outline rounded-md outline-white/20"
         placeholder="Write your message here..."
         contentEditable
         onInput={onInput}

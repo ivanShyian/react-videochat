@@ -30,28 +30,30 @@ body {
 .pretty-scrollbar::-webkit-scrollbar {
   @apply w-1.5;
 }
-
-/* Track */
 .pretty-scrollbar::-webkit-scrollbar-track {
   @apply bg-transparent w-1;
 }
-
 /* Handle */
 .pretty-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-[#74133c] rounded-2xl;
 }
-
 /* Handle on hover */
 .pretty-scrollbar::-webkit-scrollbar-thumb:hover {
   @apply bg-[#5c1434];
 }
 
-.pretty-scrollbar-dark::-webkit-scrollbar-thumb {
-  @apply bg-[#0f172a] rounded-2xl;
-}
 
-.pretty-scrollbar-dark::-webkit-scrollbar-thumb:hover {
-  @apply bg-[#0f172a] rounded-2xl;
+.pretty-scrollbar-white::-webkit-scrollbar {
+  @apply w-1.5;
+}
+.pretty-scrollbar-white::-webkit-scrollbar-track {
+  @apply bg-transparent w-1;
+}
+.pretty-scrollbar-white::-webkit-scrollbar-thumb {
+  @apply bg-[#9d9d9d] rounded-2xl;
+}
+.pretty-scrollbar-white::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#e5e5e5] rounded-2xl;
 }
 
 .blurred-bg {

@@ -27,8 +27,8 @@ export const TheSidebarChats: FC = () => {
       <ul className="sidebar__chats_list">
         {Object.keys(sortedChats).map((chatKey, id) => {
           const chat = chats[chatKey]
-          const messageArr = chat.lastMessage?.content.match(/(^<div>(.*?)<\/div>)|((?:(?!(<div>)|(<br>)).)*)|(.*)/)
-          const message = !!messageArr && messageArr[0]
+          console.log(chat.lastMessage?.content)
+          const messagePretty = chat.lastMessage?.content.replace(/<br>|<div>(.*?)<\/div>/gm, ' ')
           return (
             <li
               key={id}
@@ -44,7 +44,7 @@ export const TheSidebarChats: FC = () => {
                   chat.lastMessage
                     ? (
                       <>
-                        <div className="overflow-hidden text-ellipsis inline" dangerouslySetInnerHTML={{__html: message as string}} />
+                        <div className="overflow-hidden text-ellipsis inline" dangerouslySetInnerHTML={{__html: messagePretty as string}} />
                         <span className="text-xs">{moment(chat.lastMessage?.updatedAt).format('HH:mm')}</span>
                       </>
                     )

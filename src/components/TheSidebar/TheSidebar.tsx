@@ -3,9 +3,9 @@ import TheSidebarMembers from './TheSidebarMembers'
 import TheSidebarSearch from './TheSidebarSearch'
 import TheSidebarChats from './TheSidebarChats'
 import {useParams} from 'react-router-dom'
+import TheSidebarFooter from '@/components/TheSidebar/TheSidebarFooter'
 
 export const TheSidebar: FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
   const aside = useRef<HTMLDivElement | null>(null)
   const params = useParams()
 
@@ -29,8 +29,11 @@ export const TheSidebar: FC = () => {
         <div className="relative z-10 h-full">
           <TheSidebarSearch />
           <div className="h-full overflow-y-auto pretty-scrollbar pb-8">
-            <TheSidebarMembers />
-            <TheSidebarChats />
+            <div className="mb-14">
+              <TheSidebarMembers />
+              <TheSidebarChats />
+            </div>
+            <TheSidebarFooter />
           </div>
         </div>
         <div className="sidebar__bg blurred-bg before:z-0 !static" />
