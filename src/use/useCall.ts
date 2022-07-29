@@ -9,6 +9,7 @@ import EventEmitter from '@/utils/EventEmiiter'
 import {SocketService} from '@/use/useChat'
 import PeerService, {ICallPayload} from '../services/PeerService'
 import {toast} from 'react-toastify'
+import moment from 'moment'
 
 export interface ICallReturnStatement {
   videoRef: RefObject<HTMLVideoElement>;
@@ -22,6 +23,7 @@ export interface ICallReturnStatement {
   toggleAudioStream: () => void
   toggleVideoStream: () => void
   isCallEstablished: boolean
+  callDuration: string
 }
 
 type TCallPayload = ICallPayload & {
@@ -46,6 +48,9 @@ export const useCall = (): ICallReturnStatement => {
   const [isCallView, setCallView] = useState<boolean>(false)
   const [isCallEstablished, setCallEstablished] = useState<boolean>(false)
 
+  const [startCallDate, setCallDate] = useState<number | null>(null)
+  const [callDuration, setCallDuration] = useState<string>('00:00')
+
   const videoRef = useRef<HTMLVideoElement>(null)
   const videoRefMember = useRef<HTMLVideoElement>(null)
 
@@ -63,14 +68,13 @@ export const useCall = (): ICallReturnStatement => {
       initPeer()
     }
   }, [chats])
-
+  // Subscribe events after peer init
   useEffect(() => {
     if (chats) {
       initPeerEmitter()
       initSocketEmitter()
     }
   }, [chats])
-
   // Caller
   useEffect(() => {
     if (currentChat?.callData?.type === 'caller' && params.chatId && videoRef.current) {
@@ -78,7 +82,6 @@ export const useCall = (): ICallReturnStatement => {
       connectWithUser(currentChat.callData.receiverId!, params.chatId)
     }
   }, [isCallView, currentChat])
-
   // Receiver
   useEffect(() => {
     if (isCallView && currentChat?.callData?.type === 'receiver' && videoRef.current) {
@@ -86,8 +89,7 @@ export const useCall = (): ICallReturnStatement => {
       acceptCallStream()
     }
   }, [isCallView, currentChat])
-
-  // Chat change handling
+  // Chat toggle handler
   useEffect(() => {
     if (!!(params.chatId && currentChat?.callData)) {
       setCallView(true)
@@ -97,6 +99,16 @@ export const useCall = (): ICallReturnStatement => {
     setCallView(false)
     setCallEstablished(false)
   }, [params])
+  // Timer
+  useEffect(() => {
+    if (startCallDate) {
+      const interval = setInterval(() => {
+        setCallDuration(moment(Date.now() - startCallDate).format('mm:ss'))
+      }, 1000)
+      if (!isCallView) clearTimer(interval)
+      return () => clearTimer(interval)
+    }
+  }, [startCallDate, isCallView])
 
   const initSocketEmitter = () => {
     callEvents = new EventEmitter()
@@ -114,7 +126,6 @@ export const useCall = (): ICallReturnStatement => {
       toast.info('User busy!')
     })
   }
-
   const initPeerEmitter = () => {
     peerEvents = new EventEmitter()
 
@@ -132,11 +143,11 @@ export const useCall = (): ICallReturnStatement => {
         ...streamPayload
       })
       setCallEstablished(true)
+      setCallDate(Date.now())
     })
 
     peerEvents.on('onCallClose', endCall)
   }
-
   const initPeer = () => {
     peerService = new PeerService(user.id)
     setPeerExists(!!peerService.peerInstance)
@@ -189,7 +200,6 @@ export const useCall = (): ICallReturnStatement => {
   const acceptCall = (roomId: string) => {
     navigate(`/chats/${roomId}`)
   }
-
   const acceptCallStream = async() => {
     if (currentChat?.callData) {
       if (currentChat.callData.userVideoStream && currentChat.callData.myVideoStream) {
@@ -233,6 +243,7 @@ export const useCall = (): ICallReturnStatement => {
       }
       if (chat?.callData?.myVideoStream) removeTracks(chat.callData.myVideoStream)
       setCallView(false)
+      setCallEstablished(false)
       removeCallData(room)
     }
   }, [currentChat])
@@ -262,6 +273,12 @@ export const useCall = (): ICallReturnStatement => {
     }
   }
 
+  const clearTimer = (interval: NodeJS.Timer) => {
+    clearInterval(interval)
+    setCallDate(null)
+    setCallDuration('00:00')
+  }
+
   return {
     videoRef,
     videoRefMember,
@@ -273,6 +290,7 @@ export const useCall = (): ICallReturnStatement => {
     closeCall,
     toggleAudioStream,
     toggleVideoStream,
-    isCallEstablished
+    isCallEstablished,
+    callDuration
   }
 }

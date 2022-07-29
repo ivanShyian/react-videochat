@@ -4,7 +4,7 @@ export const SVideo: FC<{videoRef: LegacyRef<HTMLVideoElement>, className?: stri
   return (
     <div className={`${className}`}>
       <video
-        className="max-w-[100%] h-full"
+        className="max-w-[100%] h-full md:mx-auto"
         playsInline={true}
         ref={videoRef}
       />
