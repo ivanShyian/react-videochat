@@ -11,7 +11,7 @@ export const ChatsChatFooterSend: FC<Props> = ({ sendMessage }) => {
     <div className="chat__send mt-0">
       <SButton
         theme="transparent"
-        className="!p-0 !h-9 !w-12 rounded-xl rounded-r-none flex items-center justify-center border-none opacity-70 hover:!bg-white/10 hover:opacity-100"
+        className="!p-0 !h-[2.125rem] !w-12 rounded-xl rounded-r-none flex items-center justify-center border-none opacity-70 hover:!bg-white/10 hover:opacity-100"
         size="small"
         onClick={sendMessage}
       >

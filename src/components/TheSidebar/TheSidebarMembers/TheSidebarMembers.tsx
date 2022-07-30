@@ -5,7 +5,7 @@ import { UsersState } from '@/store/reducers/users/types';
 import { useChat, UseChatType } from '@/use/useChat';
 
 export const TheSidebarMembers: FC = () => {
-  const {onMemberClick} = useChat(UseChatType.Actions)
+  const {onMemberClick} = useChat(UseChatType.Disabled)
   const { users: foundUsers, query }: UsersState = useTypedSelector(selector => selector.users)
   const showNotFoundMessage = useMemo(() => query.length > 1 && !foundUsers.length, [query, foundUsers])
 

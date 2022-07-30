@@ -89,6 +89,10 @@ export const useCall = (): ICallReturnStatement => {
       acceptCallStream()
     }
   }, [isCallView, currentChat])
+
+  // Unmount
+  useEffect(() => () => peerService && peerService.destroy(), [])
+
   // Chat toggle handler
   useEffect(() => {
     if (!!(params.chatId && currentChat?.callData)) {
@@ -99,6 +103,8 @@ export const useCall = (): ICallReturnStatement => {
     setCallView(false)
     setCallEstablished(false)
   }, [params])
+
+  //@TODO Move timer to diff hook
   // Timer
   useEffect(() => {
     if (startCallDate) {

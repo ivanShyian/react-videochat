@@ -10,10 +10,10 @@ export const TheSidebarFooter: FC = () => {
   const {logout} = useActions(AuthActionCreators.logout)
 
   return (
-    <div className="h-12 border-t border-white/20 text-white/90 absolute bottom-0 left-0 right-0 flex justify-between items-center px-4">
+    <div className="h-12 border-t border-white/20 text-white/90 absolute bottom-0 left-0 right-0 flex backdrop-blur-sm z-10 justify-between items-center px-4">
       <p>{me.nickname}</p>
       <div className="flex items-center">
-        <ISettings className="fill-current text-white/80 hover:text-white cursor-pointer mr-3" />
+        {/*<ISettings className="fill-current text-white/80 hover:text-white cursor-pointer mr-3" />*/}
         <ISignout
           onClick={logout}
           className="fill-current text-white/80 hover:text-white cursor-pointer"

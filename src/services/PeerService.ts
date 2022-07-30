@@ -74,11 +74,13 @@ class PeerService {
     })
   }
 
+  destroy() {
+    this.peer.destroy()
+  }
 
   set peerInstance(peer: Peer) {
     this.peer = peer
   }
-
   get peerInstance() {
     return this.peer
   }

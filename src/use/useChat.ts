@@ -11,7 +11,8 @@ import {useCookies} from 'react-cookie'
 
 export enum UseChatType {
   Actions = 'actions',
-  Init = 'init'
+  Init = 'init',
+  Disabled = 'disabled'
 }
 
 interface ReturnStatement {
@@ -35,7 +36,7 @@ export const useChat = (type = UseChatType.Actions): ReturnStatement => {
   const [cookies]  = useCookies(['sid'])
   const {chats, isChatsFetched} = useTypedSelector(selector => selector.chats)
   const {user} = useTypedSelector(selector => selector.auth)
-  const {messages} = useTypedSelector(selector => selector.messages)
+  const {messages, isLoading} = useTypedSelector(selector => selector.messages)
   const {getChats, getMessagesByChat, createChatWithUser, setQuery} = useActions(...actionCreatorList)
   const [currentChat, setCurrentChat] = useState<IChat>({} as IChat)
 
@@ -49,16 +50,20 @@ export const useChat = (type = UseChatType.Actions): ReturnStatement => {
         SocketService.connect()
       })();
     }
+    return () => SocketService.destroyConnection()
   }, [])
 
   useEffect(() => {
-    if (chatsExists && type !== UseChatType.Actions) SocketService.subscribeToAllChats(Object.keys(chats))
+    if (chatsExists && type === UseChatType.Init) SocketService.subscribeToAllChats(Object.keys(chats))
   }, [chatsExists])
 
   useEffect(() => {
     if (chatsExists && type === UseChatType.Actions && chatId && chats[chatId]) {
       setCurrentChat(chats[chatId])
-      if (Object.keys(messages).length && messages[chatId] && messages[chatId].length) return
+      if (Object.keys(messages).length && messages[chatId] && messages[chatId].length) {
+        return
+      }
+      console.log({ messages })
       getMessagesByChat(chatId)
     }
   }, [chatsExists, chatId, chats])

@@ -69,7 +69,6 @@ class SocketService {
     })
 
     this.socket.on(SocketServerActions.UserConnectedToRoom, ({userId, room}) => {
-      console.log('conn', userId)
       store.dispatch(ChatsActionCreators.setIsOnline(room, true))
     })
 
@@ -83,7 +82,6 @@ class SocketService {
     })
 
     this.socket.on(SocketServerActions.UserDisconnected, ({ userId, room }) => {
-      console.log('disc', userId, room)
       store.dispatch(ChatsActionCreators.setIsOnline(room, false))
       callEvents.emit('user_disconnected', room)
     })
@@ -115,6 +113,10 @@ class SocketService {
 
   emitUserDeclineCall(roomId: string) {
     this.socket.emit(SocketClientActions.CallDeclined, {room: roomId})
+  }
+
+  destroyConnection() {
+    this.socket.disconnect()
   }
 
   // leaveFromRoom(room: string) {

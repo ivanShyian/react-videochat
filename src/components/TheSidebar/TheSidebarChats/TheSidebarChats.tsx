@@ -1,12 +1,12 @@
 import {FC, useMemo} from 'react'
-import { useTypedSelector } from '@/use/useTypedSelector'
-import { useNavigate } from 'react-router-dom'
-import { ReactComponent as ISpinner } from '@/assets/icons/i-spinner.svg'
+import {useTypedSelector} from '@/use/useTypedSelector'
+import {useNavigate} from 'react-router-dom'
+import {ReactComponent as ISpinner} from '@/assets/icons/i-spinner.svg'
 import moment from 'moment'
 import sortChats from '@/utils/sortChats'
 
 export const TheSidebarChats: FC = () => {
-  const { chats, isLoading } = useTypedSelector(selector => selector.chats)
+  const {chats, isLoading} = useTypedSelector(selector => selector.chats)
   const navigate = useNavigate()
 
   const sortedChats = useMemo(() => {
@@ -16,7 +16,7 @@ export const TheSidebarChats: FC = () => {
   if (!Object.keys(chats).length && isLoading) {
     return (
       <p className="flex justify-center items-center text-center text-md border-b border-white/20 relative h-[53px]">
-        <ISpinner className="animate-spin h-4 text-white/20 fill-red-400 mr-2" />
+        <ISpinner className="animate-spin h-4 text-white/20 fill-red-400 mr-2"/>
         <span className="text-white/20">Loading...</span>
       </p>
     )
@@ -27,7 +27,6 @@ export const TheSidebarChats: FC = () => {
       <ul className="sidebar__chats_list">
         {Object.keys(sortedChats).map((chatKey, id) => {
           const chat = chats[chatKey]
-          console.log(chat.lastMessage?.content)
           const messagePretty = chat.lastMessage?.content.replace(/<br>|<div>(.*?)<\/div>/gm, ' ')
           return (
             <li
@@ -36,21 +35,21 @@ export const TheSidebarChats: FC = () => {
               onClick={() => navigate(`/chats/${chat.id}`)}
             >
               <p className="text-lg text-blue-200 flex justify-between items-center">
-                <span>{chat.member.nickname}</span>
+                <span>{chat.member?.nickname}</span>
                 {chat.isOnline && <span className="text-xs text-blue-200/70">online</span>}
               </p>
-              <div className="flex justify-between items-end text-sm -mt-1 whitespace-nowrap overflow-hidden text-ellipsis text-white/60">
-                {
-                  chat.lastMessage
-                    ? (
-                      <>
-                        <div className="overflow-hidden text-ellipsis inline" dangerouslySetInnerHTML={{__html: messagePretty as string}} />
-                        <span className="text-xs">{moment(chat.lastMessage?.updatedAt).format('HH:mm')}</span>
-                      </>
-                    )
-                    : <span className="text-white/20">No messages yet</span>
-                }
-              </div>
+              {
+                chat.lastMessage
+                  ? (
+                    <div
+                      className="flex justify-between items-end text-sm -mt-1 whitespace-nowrap overflow-hidden text-ellipsis text-white/60">
+                      <div className="overflow-hidden text-ellipsis inline"
+                           dangerouslySetInnerHTML={{__html: messagePretty as string}}/>
+                      <span className="text-xs mb-0.5">{moment(chat.lastMessage?.updatedAt).format('HH:mm')}</span>
+                    </div>
+                  )
+                  : <span className="text-white/20">No messages yet</span>
+              }
             </li>
           )
         })}
