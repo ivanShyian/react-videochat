@@ -24,7 +24,7 @@ export const ChatFooter: FC<Props> = ({ sendMessage,  }) => {
       className="chat__footer mt-auto flex items-center relative border-t border-white/20 px-2"
     >
       {/*<IClip />*/}
-      {/*<ChatFooterEmoji onEmoji={setEmojiToInject} />*/}
+      <ChatFooterEmoji onEmoji={setEmojiToInject} />
       <ChatFooterTextField
         message={message}
         injectEmoji={emojiToInject}
